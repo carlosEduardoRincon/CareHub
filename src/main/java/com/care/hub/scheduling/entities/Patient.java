@@ -6,5 +6,4 @@ public class Patient {
     private String name;
     private LocalDate birthDay;
     private String cpf;
-    private String agreement;
 }
