@@ -1,0 +1,92 @@
+enum Speciality {
+    HEART
+}
+
+type Patient {
+    id: ID!
+    name: String!
+    birthDay: String!
+    cpf: String!
+}
+
+input PatientInput {
+    name: String!
+    birthDay: String!
+    cpf: String!
+}
+
+type PatientResponse {
+    id: ID!
+    name: String!
+    birthDay: String!
+    cpf: String!
+}
+
+type Doctor {
+    id: ID!
+    name: String!
+    cpf: String!
+    crm: String!
+    startWorkTime: String!
+    endWorkTime: String!
+    speciality: Speciality!
+}
+
+input DoctorInput {
+    name: String!
+    cpf: String!
+    crm: String!
+    startWorkTime: String!
+    endWorkTime: String!
+    speciality: Speciality!
+}
+
+type DoctorResponse {
+    id: ID!
+    name: String!
+    cpf: String!
+    crm: String!
+    startWorkTime: String!
+    endWorkTime: String!
+    speciality: Speciality!
+}
+
+type Schedule {
+    id: ID!
+    startTime: String!
+    endTime: String!
+    patientId: ID!
+    doctorId: ID!
+}
+
+input ScheduleInput {
+    startTime: String!
+    endTime: String!
+    patientId: ID!
+    doctorId: ID!
+}
+
+type ScheduleResponse {
+    id: ID!
+    startTime: String!
+    endTime: String!
+    patientId: ID!
+    doctorId: ID!
+}
+
+extend type Query {
+    listPatient: [PatientResponse!]!
+    listPatientSchedules(id: ID!): [Schedule!]!
+    listPatientFutureSchedules(id: ID!): [Schedule!]!
+    listDoctor: [DoctorResponse!]!
+    listDoctorById(id: ID!): DoctorResponse
+    listScheduleById(id: ID!): Schedule!
+}
+
+extend type Mutation {
+    addPatient(patientInput: PatientInput!): PatientResponse
+    addDoctor(doctorInput: DoctorInput!): DoctorResponse
+    addSchedule(scheduleInput: ScheduleInput!): ScheduleResponse
+    updateSchedule(scheduleInput: ScheduleInput!): ScheduleResponse
+
+}

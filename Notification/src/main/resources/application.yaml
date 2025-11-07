@@ -1,0 +1,31 @@
+spring:
+  profiles:
+    active: local
+  application:
+    name: CareHub
+  datasource:
+    url: jdbc:postgresql://carehub_db:5432/carehub
+    username: carehub
+    password: carehub123
+    default-schema: carehub
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  sql:
+    init:
+      continue-on-error: true
+
+logging:
+  level:
+    org:
+      flywaydb: DEBUG
+      springframework:
+  swagger-ui:
+    url: /api/users.yaml
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:carlosEduardoRinconJunior}
