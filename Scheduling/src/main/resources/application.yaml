@@ -23,7 +23,7 @@ logging:
       flywaydb: DEBUG
       springframework:
   swagger-ui:
-    url: /api/users.yaml
+    url: /api/patients.yaml
 
 api:
   security:

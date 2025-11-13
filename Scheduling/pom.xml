@@ -17,21 +17,13 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <grpc.version>1.68.1</grpc.version>
-        <protoc.version>3.25.1</protoc.version>
         <tomcat.annotations.version>6.0.53</tomcat.annotations.version>
-        <os.maven.plugin.version>1.7.1</os.maven.plugin.version>
-        <protobuf.maven.plugin.version>0.6.1</protobuf.maven.plugin.version>
         <junit.version>5.10.3</junit.version>
         <surefire.version>3.3.1</surefire.version>
     </properties>
 
     <dependencies>
         <!-- Spring Boot Starters -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-graphql</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -68,23 +60,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- gRPC -->
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-netty-shaded</artifactId>
-            <version>${grpc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-protobuf</artifactId>
-            <version>${grpc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-stub</artifactId>
-            <version>${grpc.version}</version>
-        </dependency>
-
         <!-- db -->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -100,6 +75,13 @@
             <artifactId>flyway-core</artifactId>
             <version>10.15.2</version>
         </dependency>
+
+        <!-- swagger -->
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations</artifactId>
+            <version>2.2.22</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -109,42 +91,86 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
-            <!-- OS Detection (gRPC) -->
             <plugin>
-                <groupId>kr.motd.maven</groupId>
-                <artifactId>os-maven-plugin</artifactId>
-                <version>${os.maven.plugin.version}</version>
+                <groupId>io.swagger.codegen.v3</groupId>
+                <artifactId>swagger-codegen-maven-plugin</artifactId>
+                <version>3.0.57</version>
                 <executions>
                     <execution>
+                        <id>doctors</id>
                         <goals>
-                            <goal>detect</goal>
+                            <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/static/api/doctors.yaml</inputSpec>
+                            <language>spring</language>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <apiPackage>com.carehub.doctors.api</apiPackage>
+                            <modelPackage>com.carehub.doctors.model</modelPackage>
+                            <modelNameSuffix>DTO</modelNameSuffix>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                                <jakarta>true</jakarta>
+                                <java8>true</java8>
+                            </configOptions>
+                        </configuration>
                     </execution>
-                </executions>
-            </plugin>
-
-            <!-- Protobuf Plugin -->
-            <plugin>
-                <groupId>org.xolstice.maven.plugins</groupId>
-                <artifactId>protobuf-maven-plugin</artifactId>
-                <version>${protobuf.maven.plugin.version}</version>
-                <configuration>
-                    <protocArtifact>
-                        com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}
-                    </protocArtifact>
-                    <pluginId>grpc-java</pluginId>
-                    <pluginArtifact>
-                        io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
-                    </pluginArtifact>
-                    <protoSourceRoot>${basedir}/src/main/proto/</protoSourceRoot>
-                </configuration>
-                <executions>
                     <execution>
+                        <id>nurses</id>
                         <goals>
-                            <goal>compile</goal>
-                            <goal>compile-custom</goal>
+                            <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/static/api/nurses.yaml</inputSpec>
+                            <language>spring</language>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <apiPackage>com.carehub.nurses.api</apiPackage>
+                            <modelPackage>com.carehub.nurses.model</modelPackage>
+                            <modelNameSuffix>DTO</modelNameSuffix>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                                <jakarta>true</jakarta>
+                                <java8>true</java8>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>patients</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/static/api/patients.yaml</inputSpec>
+                            <language>spring</language>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <apiPackage>com.carehub.patients.api</apiPackage>
+                            <modelPackage>com.carehub.patients.model</modelPackage>
+                            <modelNameSuffix>DTO</modelNameSuffix>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                                <jakarta>true</jakarta>
+                                <java8>true</java8>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>schedules</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/static/api/schedules.yaml</inputSpec>
+                            <language>spring</language>
+                            <generateSupportingFiles>false</generateSupportingFiles>
+                            <apiPackage>com.carehub.schedules.api</apiPackage>
+                            <modelPackage>com.carehub.schedules.model</modelPackage>
+                            <modelNameSuffix>DTO</modelNameSuffix>
+                            <configOptions>
+                                <interfaceOnly>true</interfaceOnly>
+                                <jakarta>true</jakarta>
+                                <java8>true</java8>
+                            </configOptions>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

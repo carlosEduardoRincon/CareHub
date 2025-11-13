@@ -1,0 +1,288 @@
+openapi: 3.0.3
+info:
+  title: Doctors API
+  version: 1.0.0
+  description: API for managing hospital doctors
+  contact:
+    name: Carlos Eduardo Rincon Junior
+    email: carloscaca147@gmail.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:8080/
+    description: Local server
+tags:
+  - name: Doctors
+    description: Operations related to hospital doctors
+paths:
+  /doctor:
+    get:
+      tags:
+        - Doctors
+      summary: List all doctors
+      operationId: listDoctors
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 0
+            example: 1
+        - name: perPage
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+            example: 10
+      responses:
+        "200":
+          description: A list of doctors
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedDoctors"
+  /doctor/{doctorId}:
+    get:
+      tags:
+        - Doctors
+      summary: Get a doctor by ID
+      operationId: getDoctor
+      parameters:
+        - name: doctorId
+          in: path
+          description: ID of the doctor to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Doctor found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Doctor"
+        "400":
+          description: Bad request
+        "404":
+          description: User not found
+    put:
+      tags:
+        - Doctors
+      summary: Update a doctor
+      operationId: updateDoctor
+      parameters:
+        - name: doctorId
+          in: path
+          description: ID of the doctor to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDoctor"
+      responses:
+        "200":
+          description: Doctor updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Doctor"
+        "404":
+          description: Doctor not found
+    delete:
+      tags:
+        - Doctors
+      summary: Delete a doctor
+      operationId: deleteDoctor
+      parameters:
+        - name: doctorId
+          in: path
+          description: ID of the doctor to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Doctor deleted
+        "400":
+          description: Bad request
+components:
+  schemas:
+    UpdateDoctor:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the doctor
+          maxLength: 100
+          example: Carlos
+        email:
+          type: string
+          description: E-mail of the doctor
+          maxLength: 50
+          example: example@email.com.br
+        startWorkTime:
+          type: string
+          format: date-time
+          description: Date and time when the doctor start work
+          example: 2025-07-17T21:00:00
+        endWorkTime:
+          type: string
+          format: date-time
+          description: Date and time when the doctor end work
+          example: 2025-07-17T21:00:00
+        speciality:
+          type: string
+          description: Identify the week-day
+          enum:
+            - CARDIOLOGY
+            - NEUROLOGY
+            - ORTHOPEDICS
+            - PEDIATRICS
+            - DERMATOLOGY
+            - ONCOLOGY
+            - GASTROENTEROLOGY
+            - ENDOCRINOLOGY
+            - OPHTHALMOLOGY
+    PaginatedDoctors:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        perPage:
+          type: integer
+          example: 10
+        total:
+          type: integer
+          format: int64
+          example: 100
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Doctor"
+    Doctor:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Id of the doctor
+          maxLength: 10
+          example: 15
+        name:
+          type: string
+          description: Name of the doctor
+          maxLength: 100
+          example: Carlos
+        email:
+          type: string
+          description: E-mail of the doctor
+          maxLength: 50
+          example: example@email.com.br
+        login:
+          type: string
+          description: Login of the doctor
+          maxLength: 30
+          example: rincon123
+        cpf:
+          type: string
+          description: CPF of the doctor
+          maxLength: 14
+          example: 121.323.232-11
+        crm:
+          type: string
+          description: CRM of the doctor
+          maxLength: 15
+          example: CRM/SP 123456
+        startWorkTime:
+          type: string
+          format: date-time
+          description: Date and time when the doctor start work
+          example: 2025-07-17T21:00:00
+        endWorkTime:
+          type: string
+          format: date-time
+          description: Date and time when the doctor end work
+          example: 2025-07-17T21:00:00
+        speciality:
+          type: string
+          description: Identify the week-day
+          enum:
+            - CARDIOLOGY
+            - NEUROLOGY
+            - ORTHOPEDICS
+            - PEDIATRICS
+            - DERMATOLOGY
+            - ONCOLOGY
+            - GASTROENTEROLOGY
+            - ENDOCRINOLOGY
+            - OPHTHALMOLOGY
+    CreateDoctor:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the doctor
+          maxLength: 100
+          example: Carlos
+        email:
+          type: string
+          description: E-mail of the doctor
+          maxLength: 50
+          example: example@email.com.br
+        login:
+          type: string
+          description: Login of the doctor
+          maxLength: 30
+          example: rincon123
+        password:
+          type: string
+          description: Password of the doctor
+          minLength: 5
+          maxLength: 30
+          example: strongPassword123
+        cpf:
+          type: string
+          description: CPF of the doctor
+          maxLength: 14
+          example: 121.323.232-11
+        crm:
+          type: string
+          description: CRM of the doctor
+          maxLength: 15
+          example: CRM/SP 123456
+        startWorkTime:
+          type: string
+          format: date-time
+          description: Date and time when the doctor start work
+          example: 2025-07-17T21:00:00
+        endWorkTime:
+          type: string
+          format: date-time
+          description: Date and time when the doctor end work
+          example: 2025-07-17T21:00:00
+        speciality:
+          type: string
+          description: Identify the week-day
+          enum:
+            - CARDIOLOGY
+            - NEUROLOGY
+            - ORTHOPEDICS
+            - PEDIATRICS
+            - DERMATOLOGY
+            - ONCOLOGY
+            - GASTROENTEROLOGY
+            - ENDOCRINOLOGY
+            - OPHTHALMOLOGY

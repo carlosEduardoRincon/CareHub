@@ -1,0 +1,456 @@
+openapi: 3.0.3
+info:
+  title: Users API
+  version: 1.0.0
+  description: API for managing restaurant users
+  contact:
+    name: Carlos Eduardo Rincon Junior
+    email: carlos.rincon.junior@aluno.ifsp.edu.br
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: http://localhost:8080/
+    description: Local server
+tags:
+  - name: Users
+    description: Operations related to restaurant users
+paths:
+  /login:
+    post:
+      tags:
+        - Users
+      summary: Login user
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginUser"
+      responses:
+        "200":
+          description: Login successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+  /user:
+    get:
+      tags:
+        - Users
+      summary: List all users
+      operationId: listUsers
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          required: false
+          schema:
+            type: integer
+            default: 0
+            example: 1
+        - name: perPage
+          in: query
+          description: Number of items per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+            example: 10
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedUsers"
+    post:
+      tags:
+        - Users
+      summary: Create a new user
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUser"
+      responses:
+        "201":
+          description: User created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: /user/123e4567-e89b-12d3-a456-426614174000
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+  /user/{userId}:
+    get:
+      tags:
+        - Users
+      summary: Get a user by ID
+      operationId: getUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Bad request
+        "404":
+          description: User not found
+    put:
+      tags:
+        - Users
+      summary: Update a user
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUser"
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User not found
+    delete:
+      tags:
+        - Users
+      summary: Delete a user
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: User deleted
+        "400":
+          description: Bad request
+  /user/{userId}/password:
+    patch:
+      tags:
+        - Users
+      summary: Change user password
+      operationId: changePassword
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChangePassword"
+      responses:
+        "204":
+          description: Password updated
+        "404":
+          description: User not found
+  /user/enable/{userId}:
+    patch:
+      tags:
+        - Users
+      summary: Enable a user
+      operationId: enableUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user to enable
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: User enabled
+        "404":
+          description: User not found
+  /user/disable/{userId}:
+    patch:
+      tags:
+        - Users
+      summary: Disable a user
+      operationId: disableUser
+      parameters:
+        - name: userId
+          in: path
+          description: ID of the user to disable
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: User disabled
+        "404":
+          description: User not found
+components:
+  schemas:
+    CreateUser:
+      required:
+        - name
+        - email
+        - login
+        - password
+        - updatedAt
+        - address
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the user
+          minLength: 5
+          maxLength: 100
+          example: Carlos
+        email:
+          type: string
+          format: email
+          description: E-mail of the user
+          minLength: 5
+          maxLength: 50
+          example: example@email.com.br
+        login:
+          type: string
+          description: Login of the user
+          minLength: 5
+          maxLength: 30
+          example: rincon123
+        password:
+          type: string
+          description: Password of the user
+          minLength: 5
+          maxLength: 30
+          example: strongPassword123
+        address:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateAddress"
+        profileType:
+          type: string
+          description: OWNER or CLIENT
+          enum:
+            - CLIENT
+            - DONO
+          example: CLIENT
+    UpdateUser:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the user
+          minLength: 5
+          maxLength: 100
+          example: Carlos
+        email:
+          type: string
+          description: E-mail of the user
+          minLength: 5
+          maxLength: 50
+          example: example@email.com.br
+        login:
+          type: string
+          description: Login of the user
+          minLength: 5
+          maxLength: 30
+          example: rincon123
+    PaginatedUsers:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        perPage:
+          type: integer
+          example: 10
+        total:
+          type: integer
+          format: int64
+          example: 100
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Id of the user
+          maxLength: 10
+          example: 15
+        name:
+          type: string
+          description: Name of the user
+          maxLength: 100
+          example: Carlos
+        email:
+          type: string
+          description: E-mail of the user
+          maxLength: 50
+          example: example@email.com.br
+        login:
+          type: string
+          description: Login of the user
+          maxLength: 30
+          example: rincon123
+        address:
+          type: array
+          items:
+            $ref: "#/components/schemas/Address"
+        active:
+          type: boolean
+          description: Indicates if the user is active
+          example: true
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the user was created
+          example: 2025-07-17T21:00:00
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date and time when the user was updated
+          example: 2025-07-17T21:00:00
+    Address:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Id of the address
+          minLength: 1
+          maxLength: 10
+          example: 15
+        street:
+          type: string
+          description: Street of the user
+          minLength: 5
+          maxLength: 50
+          example: Street 01
+        number:
+          type: integer
+          description: Street number of the user
+          maxLength: 5
+          example: 1001
+        city:
+          type: string
+          description: City of the user
+          minLength: 3
+          maxLength: 50
+          example: Jundiaí
+        state:
+          type: string
+          description: State of the user
+          minLength: 2
+          maxLength: 50
+          example: São Paulo
+        country:
+          type: string
+          description: Country of the user
+          minLength: 2
+          maxLength: 50
+          example: Brazil
+    CreateAddress:
+      type: object
+      properties:
+        street:
+          type: string
+          description: Street of the user
+          minLength: 5
+          maxLength: 50
+          example: Street 01
+        number:
+          type: integer
+          description: Street number of the user
+          minLength: 1
+          maxLength: 5
+          example: 1001
+        city:
+          type: string
+          description: City of the user
+          minLength: 3
+          maxLength: 50
+          example: Jundiaí
+        state:
+          type: string
+          description: State of the user
+          minLength: 2
+          maxLength: 50
+          example: São Paulo
+        country:
+          type: string
+          description: Country of the user
+          minLength: 2
+          maxLength: 50
+          example: Brazil
+    LoginUser:
+      type: object
+      required:
+        - login
+        - password
+      properties:
+        login:
+          type: string
+          description: Login of the user
+          minLength: 5
+          maxLength: 30
+          example: rincon123
+        password:
+          type: string
+          description: Password of the user
+          minLength: 5
+          maxLength: 30
+          example: strongPassword123
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: JWT token
+    ChangePassword:
+      type: object
+      properties:
+        old-password:
+          type: string
+        new-password:
+          type: string
