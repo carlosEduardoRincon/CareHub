@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Users API
+  title: Patients API
   version: 1.0.0
-  description: API for managing restaurant users
+  description: API for managing hospital patients
   contact:
     name: Carlos Eduardo Rincon Junior
     email: carlos.rincon.junior@aluno.ifsp.edu.br
@@ -13,34 +13,15 @@ servers:
   - url: http://localhost:8080/
     description: Local server
 tags:
-  - name: Users
-    description: Operations related to restaurant users
+  - name: Patients
+    description: Operations related to restaurant patients
 paths:
-  /login:
-    post:
-      tags:
-        - Users
-      summary: Login user
-      operationId: login
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LoginUser"
-      responses:
-        "200":
-          description: Login successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/LoginResponse"
-  /user:
+  /patient:
     get:
       tags:
-        - Users
-      summary: List all users
-      operationId: listUsers
+        - Patients
+      summary: List all patients
+      operationId: listPatients
       parameters:
         - name: page
           in: query
@@ -60,69 +41,69 @@ paths:
             example: 10
       responses:
         "200":
-          description: A list of users
+          description: A list of patients
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PaginatedUsers"
+                $ref: "#/components/schemas/PaginatedPatients"
     post:
       tags:
-        - Users
-      summary: Create a new user
-      operationId: createUser
+        - Patients
+      summary: Create a new patient
+      operationId: createPatient
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateUser"
+              $ref: "#/components/schemas/CreatePatient"
       responses:
         "201":
-          description: User created
+          description: Patient created
           headers:
             Location:
               schema:
                 type: string
                 format: uri
-                example: /user/123e4567-e89b-12d3-a456-426614174000
+                example: /patient/123e4567-e89b-12d3-a456-426614174000
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-  /user/{userId}:
+                $ref: "#/components/schemas/Patient"
+  /patient/{patientId}:
     get:
       tags:
-        - Users
-      summary: Get a user by ID
-      operationId: getUser
+        - Patients
+      summary: Get a patient by ID
+      operationId: getPatient
       parameters:
-        - name: userId
+        - name: patientId
           in: path
-          description: ID of the user to return
+          description: ID of the patient to return
           required: true
           schema:
             type: integer
             format: int64
       responses:
         "200":
-          description: User found
+          description: Patient found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/Patient"
         "400":
           description: Bad request
         "404":
-          description: User not found
+          description: Patient not found
     put:
       tags:
-        - Users
-      summary: Update a user
-      operationId: updateUser
+        - Patients
+      summary: Update a patient
+      operationId: updatePatient
       parameters:
-        - name: userId
+        - name: patientId
           in: path
-          description: ID of the user to update
+          description: ID of the patient to update
           required: true
           schema:
             type: integer
@@ -132,167 +113,118 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateUser"
+              $ref: "#/components/schemas/UpdatePatient"
       responses:
         "200":
-          description: User updated
+          description: Patient updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/Patient"
         "404":
-          description: User not found
+          description: Patient not found
     delete:
       tags:
-        - Users
-      summary: Delete a user
-      operationId: deleteUser
+        - Patients
+      summary: Delete a patient
+      operationId: deletePatient
       parameters:
-        - name: userId
+        - name: patientId
           in: path
-          description: ID of the user to delete
+          description: ID of the patient to delete
           required: true
           schema:
             type: integer
             format: int64
       responses:
         "204":
-          description: User deleted
+          description: Patient deleted
         "400":
           description: Bad request
-  /user/{userId}/password:
-    patch:
-      tags:
-        - Users
-      summary: Change user password
-      operationId: changePassword
-      parameters:
-        - name: userId
-          in: path
-          description: ID of the user to update
-          required: true
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ChangePassword"
-      responses:
-        "204":
-          description: Password updated
-        "404":
-          description: User not found
-  /user/enable/{userId}:
-    patch:
-      tags:
-        - Users
-      summary: Enable a user
-      operationId: enableUser
-      parameters:
-        - name: userId
-          in: path
-          description: ID of the user to enable
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        "200":
-          description: User enabled
-        "404":
-          description: User not found
-  /user/disable/{userId}:
-    patch:
-      tags:
-        - Users
-      summary: Disable a user
-      operationId: disableUser
-      parameters:
-        - name: userId
-          in: path
-          description: ID of the user to disable
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        "200":
-          description: User disabled
-        "404":
-          description: User not found
 components:
   schemas:
-    CreateUser:
+    CreatePatient:
       required:
         - name
         - email
         - login
         - password
-        - updatedAt
         - address
+        - birthDate
+        - telephone
       type: object
       properties:
         name:
           type: string
-          description: Name of the user
+          description: Name of the patient
           minLength: 5
           maxLength: 100
           example: Carlos
         email:
           type: string
           format: email
-          description: E-mail of the user
+          description: E-mail of the patient
           minLength: 5
           maxLength: 50
           example: example@email.com.br
         login:
           type: string
-          description: Login of the user
+          description: Login of the patient
           minLength: 5
           maxLength: 30
           example: rincon123
         password:
           type: string
-          description: Password of the user
+          description: Password of the patient
           minLength: 5
           maxLength: 30
           example: strongPassword123
         address:
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateAddress"
-        profileType:
           type: string
-          description: OWNER or CLIENT
-          enum:
-            - CLIENT
-            - DONO
-          example: CLIENT
-    UpdateUser:
+          description: Address of the patient
+          minLength: 5
+          maxLength: 255
+          example: Av Street, 12
+        birthDate:
+          type: string
+          format: date
+          description: Birthdate of the patient
+          example: 2025-07-17
+        telephone:
+          type: string
+          description: Telephone of the patient
+          minLength: 14
+          maxLength: 30
+          example: (11) 12342-1234
+    UpdatePatient:
       type: object
       properties:
         name:
           type: string
-          description: Name of the user
+          description: Name of the patient
           minLength: 5
           maxLength: 100
           example: Carlos
         email:
           type: string
-          description: E-mail of the user
+          format: email
+          description: E-mail of the patient
           minLength: 5
           maxLength: 50
           example: example@email.com.br
-        login:
+        address:
           type: string
-          description: Login of the user
+          description: Address of the patient
           minLength: 5
+          maxLength: 255
+          example: Av Street, 12
+        telephone:
+          type: string
+          description: Telephone of the patient
+          minLength: 14
           maxLength: 30
-          example: rincon123
-    PaginatedUsers:
+          example: (11) 12342-1234
+    PaginatedPatients:
       type: object
       properties:
         page:
@@ -308,149 +240,55 @@ components:
         items:
           type: array
           items:
-            $ref: "#/components/schemas/User"
-    User:
+            $ref: "#/components/schemas/Patient"
+    Patient:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: Id of the user
+          description: Id of the patient
           maxLength: 10
           example: 15
         name:
           type: string
-          description: Name of the user
+          description: Name of the patient
+          minLength: 5
           maxLength: 100
           example: Carlos
         email:
           type: string
-          description: E-mail of the user
+          format: email
+          description: E-mail of the patient
+          minLength: 5
           maxLength: 50
           example: example@email.com.br
         login:
           type: string
-          description: Login of the user
-          maxLength: 30
-          example: rincon123
-        address:
-          type: array
-          items:
-            $ref: "#/components/schemas/Address"
-        active:
-          type: boolean
-          description: Indicates if the user is active
-          example: true
-        createdAt:
-          type: string
-          format: date-time
-          description: Date and time when the user was created
-          example: 2025-07-17T21:00:00
-        updatedAt:
-          type: string
-          format: date-time
-          description: Date and time when the user was updated
-          example: 2025-07-17T21:00:00
-    Address:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Id of the address
-          minLength: 1
-          maxLength: 10
-          example: 15
-        street:
-          type: string
-          description: Street of the user
-          minLength: 5
-          maxLength: 50
-          example: Street 01
-        number:
-          type: integer
-          description: Street number of the user
-          maxLength: 5
-          example: 1001
-        city:
-          type: string
-          description: City of the user
-          minLength: 3
-          maxLength: 50
-          example: Jundiaí
-        state:
-          type: string
-          description: State of the user
-          minLength: 2
-          maxLength: 50
-          example: São Paulo
-        country:
-          type: string
-          description: Country of the user
-          minLength: 2
-          maxLength: 50
-          example: Brazil
-    CreateAddress:
-      type: object
-      properties:
-        street:
-          type: string
-          description: Street of the user
-          minLength: 5
-          maxLength: 50
-          example: Street 01
-        number:
-          type: integer
-          description: Street number of the user
-          minLength: 1
-          maxLength: 5
-          example: 1001
-        city:
-          type: string
-          description: City of the user
-          minLength: 3
-          maxLength: 50
-          example: Jundiaí
-        state:
-          type: string
-          description: State of the user
-          minLength: 2
-          maxLength: 50
-          example: São Paulo
-        country:
-          type: string
-          description: Country of the user
-          minLength: 2
-          maxLength: 50
-          example: Brazil
-    LoginUser:
-      type: object
-      required:
-        - login
-        - password
-      properties:
-        login:
-          type: string
-          description: Login of the user
+          description: Login of the patient
           minLength: 5
           maxLength: 30
           example: rincon123
         password:
           type: string
-          description: Password of the user
+          description: Password of the patient
           minLength: 5
           maxLength: 30
           example: strongPassword123
-    LoginResponse:
-      type: object
-      properties:
-        token:
+        address:
           type: string
-          description: JWT token
-    ChangePassword:
-      type: object
-      properties:
-        old-password:
+          description: Address of the patient
+          minLength: 5
+          maxLength: 255
+          example: Av Street, 12
+        birthDate:
           type: string
-        new-password:
+          format: date
+          description: Birthdate of the patient
+          example: 2025-07-17
+        telephone:
           type: string
+          description: Telephone of the patient
+          minLength: 14
+          maxLength: 30
+          example: (11) 12342-1234

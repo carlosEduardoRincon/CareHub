@@ -46,6 +46,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PaginatedDoctors"
+    post:
+      tags:
+        - Doctors
+      summary: Create a new doctor
+      operationId: createDoctor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDoctor"
+      responses:
+        "201":
+          description: Doctor created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: /doctor/15
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Doctor"
   /doctor/{doctorId}:
     get:
       tags:
@@ -132,16 +156,6 @@ components:
           description: E-mail of the doctor
           maxLength: 50
           example: example@email.com.br
-        startWorkTime:
-          type: string
-          format: date-time
-          description: Date and time when the doctor start work
-          example: 2025-07-17T21:00:00
-        endWorkTime:
-          type: string
-          format: date-time
-          description: Date and time when the doctor end work
-          example: 2025-07-17T21:00:00
         speciality:
           type: string
           description: Identify the week-day
@@ -206,16 +220,6 @@ components:
           description: CRM of the doctor
           maxLength: 15
           example: CRM/SP 123456
-        startWorkTime:
-          type: string
-          format: date-time
-          description: Date and time when the doctor start work
-          example: 2025-07-17T21:00:00
-        endWorkTime:
-          type: string
-          format: date-time
-          description: Date and time when the doctor end work
-          example: 2025-07-17T21:00:00
         speciality:
           type: string
           description: Identify the week-day
@@ -263,16 +267,6 @@ components:
           description: CRM of the doctor
           maxLength: 15
           example: CRM/SP 123456
-        startWorkTime:
-          type: string
-          format: date-time
-          description: Date and time when the doctor start work
-          example: 2025-07-17T21:00:00
-        endWorkTime:
-          type: string
-          format: date-time
-          description: Date and time when the doctor end work
-          example: 2025-07-17T21:00:00
         speciality:
           type: string
           description: Identify the week-day

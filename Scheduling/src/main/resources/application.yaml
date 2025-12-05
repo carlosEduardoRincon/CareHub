@@ -16,6 +16,8 @@ spring:
   sql:
     init:
       continue-on-error: true
+  kafka:
+    bootstrap-servers: localhost:9092
 
 logging:
   level:

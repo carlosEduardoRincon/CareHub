@@ -42,6 +42,14 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
 
         <!-- Testes -->
         <dependency>
@@ -60,7 +68,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- db -->
+        <!-- DB -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -76,11 +84,17 @@
             <version>10.15.2</version>
         </dependency>
 
-        <!-- swagger -->
+        <!-- Swagger -->
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
             <version>2.2.22</version>
+        </dependency>
+
+        <!-- Kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
         </dependency>
     </dependencies>
 
@@ -102,7 +116,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/static/api/doctors.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/static/doctors.yaml</inputSpec>
                             <language>spring</language>
                             <generateSupportingFiles>false</generateSupportingFiles>
                             <apiPackage>com.carehub.doctors.api</apiPackage>
@@ -121,7 +135,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/static/api/nurses.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/static/nurses.yaml</inputSpec>
                             <language>spring</language>
                             <generateSupportingFiles>false</generateSupportingFiles>
                             <apiPackage>com.carehub.nurses.api</apiPackage>
@@ -140,7 +154,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/static/api/patients.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/static/patients.yaml</inputSpec>
                             <language>spring</language>
                             <generateSupportingFiles>false</generateSupportingFiles>
                             <apiPackage>com.carehub.patients.api</apiPackage>
@@ -159,7 +173,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/static/api/schedules.yaml</inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/static/schedules.yaml</inputSpec>
                             <language>spring</language>
                             <generateSupportingFiles>false</generateSupportingFiles>
                             <apiPackage>com.carehub.schedules.api</apiPackage>

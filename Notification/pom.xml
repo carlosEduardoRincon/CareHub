@@ -99,6 +99,12 @@
             <artifactId>flyway-core</artifactId>
             <version>10.15.2</version>
         </dependency>
+
+        <!-- Kafka -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

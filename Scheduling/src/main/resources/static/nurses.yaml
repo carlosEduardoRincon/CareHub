@@ -46,6 +46,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PaginatedNurses"
+    post:
+      tags:
+        - Nurses
+      summary: Create a new nurse
+      operationId: createNurse
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNurse"
+      responses:
+        "201":
+          description: Nurse created
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+                example: /schedule/123e4567-e89b-12d3-a456-426614174000
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Nurse"
   /nurse/{nurseId}:
     get:
       tags:

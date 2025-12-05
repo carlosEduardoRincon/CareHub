@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Users API
+  title: Schedules API
   version: 1.0.0
-  description: API for managing restaurant users
+  description: API for managing medical schedules
   contact:
     name: Carlos Eduardo Rincon Junior
     email: carlos.rincon.junior@aluno.ifsp.edu.br
@@ -12,35 +12,18 @@ info:
 servers:
   - url: http://localhost:8080/
     description: Local server
+
 tags:
-  - name: Users
-    description: Operations related to restaurant users
+  - name: Schedules
+    description: Operations related to medical schedules
+
 paths:
-  /login:
-    post:
-      tags:
-        - Users
-      summary: Login user
-      operationId: login
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/LoginUser"
-      responses:
-        "200":
-          description: Login successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/LoginResponse"
-  /user:
+  /schedule:
     get:
       tags:
-        - Users
-      summary: List all users
-      operationId: listUsers
+        - Schedules
+      summary: List all schedules
+      operationId: listSchedules
       parameters:
         - name: page
           in: query
@@ -60,69 +43,72 @@ paths:
             example: 10
       responses:
         "200":
-          description: A list of users
+          description: A list of schedules
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PaginatedUsers"
+                $ref: "#/components/schemas/PaginatedSchedules"
+
     post:
       tags:
-        - Users
-      summary: Create a new user
-      operationId: createUser
+        - Schedules
+      summary: Create a new schedule
+      operationId: createSchedule
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateUser"
+              $ref: "#/components/schemas/CreateSchedule"
       responses:
         "201":
-          description: User created
+          description: Schedule created
           headers:
             Location:
               schema:
                 type: string
                 format: uri
-                example: /user/123e4567-e89b-12d3-a456-426614174000
+                example: /schedule/123e4567-e89b-12d3-a456-426614174000
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-  /user/{userId}:
+                $ref: "#/components/schemas/Schedule"
+
+  /schedule/{scheduleId}:
     get:
       tags:
-        - Users
-      summary: Get a user by ID
-      operationId: getUser
+        - Schedules
+      summary: Get a schedule by ID
+      operationId: getSchedule
       parameters:
-        - name: userId
+        - name: scheduleId
           in: path
-          description: ID of the user to return
+          description: ID of the schedule to return
           required: true
           schema:
             type: integer
             format: int64
       responses:
         "200":
-          description: User found
+          description: Schedule found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/Schedule"
         "400":
           description: Bad request
         "404":
-          description: User not found
+          description: Schedule not found
+
     put:
       tags:
-        - Users
-      summary: Update a user
-      operationId: updateUser
+        - Schedules
+      summary: Update a schedule
+      operationId: updateSchedule
       parameters:
-        - name: userId
+        - name: scheduleId
           in: path
-          description: ID of the user to update
+          description: ID of the schedule to update
           required: true
           schema:
             type: integer
@@ -132,167 +118,96 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UpdateUser"
+              $ref: "#/components/schemas/UpdateSchedule"
       responses:
         "200":
-          description: User updated
+          description: Schedule updated
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/Schedule"
         "404":
-          description: User not found
+          description: Schedule not found
+
     delete:
       tags:
-        - Users
-      summary: Delete a user
-      operationId: deleteUser
+        - Schedules
+      summary: Delete a schedule
+      operationId: deleteSchedule
       parameters:
-        - name: userId
+        - name: scheduleId
           in: path
-          description: ID of the user to delete
+          description: ID of the schedule to delete
           required: true
           schema:
             type: integer
             format: int64
       responses:
         "204":
-          description: User deleted
+          description: Schedule deleted
         "400":
           description: Bad request
-  /user/{userId}/password:
-    patch:
-      tags:
-        - Users
-      summary: Change user password
-      operationId: changePassword
-      parameters:
-        - name: userId
-          in: path
-          description: ID of the user to update
-          required: true
-          schema:
-            type: integer
-            format: int64
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ChangePassword"
-      responses:
-        "204":
-          description: Password updated
-        "404":
-          description: User not found
-  /user/enable/{userId}:
-    patch:
-      tags:
-        - Users
-      summary: Enable a user
-      operationId: enableUser
-      parameters:
-        - name: userId
-          in: path
-          description: ID of the user to enable
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        "200":
-          description: User enabled
-        "404":
-          description: User not found
-  /user/disable/{userId}:
-    patch:
-      tags:
-        - Users
-      summary: Disable a user
-      operationId: disableUser
-      parameters:
-        - name: userId
-          in: path
-          description: ID of the user to disable
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        "200":
-          description: User disabled
-        "404":
-          description: User not found
+
 components:
   schemas:
-    CreateUser:
+    CreateSchedule:
       required:
-        - name
-        - email
-        - login
-        - password
-        - updatedAt
-        - address
+        - doctorId
+        - patientId
+        - scheduleDate
+        - scheduleHour
       type: object
       properties:
-        name:
+        doctorId:
+          type: integer
+          format: int64
+          description: ID of the doctor
+          example: 3
+        patientId:
+          type: integer
+          format: int64
+          description: ID of the patient
+          example: 7
+        scheduleDate:
           type: string
-          description: Name of the user
-          minLength: 5
-          maxLength: 100
-          example: Carlos
-        email:
+          format: date
+          description: Date of the schedule
+          example: 2025-08-10
+        scheduleHour:
           type: string
-          format: email
-          description: E-mail of the user
-          minLength: 5
-          maxLength: 50
-          example: example@email.com.br
-        login:
+          format: time
+          description: Hour of the schedule
+          example: "14:30"
+        observation:
           type: string
-          description: Login of the user
-          minLength: 5
-          maxLength: 30
-          example: rincon123
-        password:
-          type: string
-          description: Password of the user
-          minLength: 5
-          maxLength: 30
-          example: strongPassword123
-        address:
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateAddress"
-        profileType:
-          type: string
-          description: OWNER or CLIENT
-          enum:
-            - CLIENT
-            - DONO
-          example: CLIENT
-    UpdateUser:
+          description: Optional observation about the appointment
+          maxLength: 500
+          example: Patient requested afternoon appointment
+
+    UpdateSchedule:
       type: object
       properties:
-        name:
+        scheduleDate:
           type: string
-          description: Name of the user
-          minLength: 5
-          maxLength: 100
-          example: Carlos
-        email:
+          format: date
+          description: Date of the schedule
+          example: 2025-08-11
+        scheduleHour:
           type: string
-          description: E-mail of the user
-          minLength: 5
-          maxLength: 50
-          example: example@email.com.br
-        login:
+          format: time
+          description: Hour of the schedule
+          example: "16:00"
+        observation:
           type: string
-          description: Login of the user
-          minLength: 5
-          maxLength: 30
-          example: rincon123
-    PaginatedUsers:
+          description: Optional observation
+          maxLength: 500
+          example: Rescheduled due to doctor's request
+        status:
+          type: string
+          description: Status of the schedule
+          example: CANCELADA
+
+    PaginatedSchedules:
       type: object
       properties:
         page:
@@ -304,153 +219,46 @@ components:
         total:
           type: integer
           format: int64
-          example: 100
+          example: 42
         items:
           type: array
           items:
-            $ref: "#/components/schemas/User"
-    User:
+            $ref: "#/components/schemas/Schedule"
+
+    Schedule:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          description: Id of the user
-          maxLength: 10
+          description: ID of the schedule
           example: 15
-        name:
-          type: string
-          description: Name of the user
-          maxLength: 100
-          example: Carlos
-        email:
-          type: string
-          description: E-mail of the user
-          maxLength: 50
-          example: example@email.com.br
-        login:
-          type: string
-          description: Login of the user
-          maxLength: 30
-          example: rincon123
-        address:
-          type: array
-          items:
-            $ref: "#/components/schemas/Address"
-        active:
-          type: boolean
-          description: Indicates if the user is active
-          example: true
-        createdAt:
-          type: string
-          format: date-time
-          description: Date and time when the user was created
-          example: 2025-07-17T21:00:00
-        updatedAt:
-          type: string
-          format: date-time
-          description: Date and time when the user was updated
-          example: 2025-07-17T21:00:00
-    Address:
-      type: object
-      properties:
-        id:
+        doctorId:
           type: integer
           format: int64
-          description: Id of the address
-          minLength: 1
-          maxLength: 10
-          example: 15
-        street:
-          type: string
-          description: Street of the user
-          minLength: 5
-          maxLength: 50
-          example: Street 01
-        number:
+          description: ID of the doctor
+          example: 3
+        patientId:
           type: integer
-          description: Street number of the user
-          maxLength: 5
-          example: 1001
-        city:
+          format: int64
+          description: ID of the patient
+          example: 7
+        scheduleDate:
           type: string
-          description: City of the user
-          minLength: 3
-          maxLength: 50
-          example: Jundiaí
-        state:
+          format: date
+          description: Date of the schedule
+          example: 2025-08-10
+        scheduleHour:
           type: string
-          description: State of the user
-          minLength: 2
-          maxLength: 50
-          example: São Paulo
-        country:
+          format: time
+          description: Hour of the schedule
+          example: "14:30"
+        observation:
           type: string
-          description: Country of the user
-          minLength: 2
-          maxLength: 50
-          example: Brazil
-    CreateAddress:
-      type: object
-      properties:
-        street:
+          description: Optional observation
+          maxLength: 500
+          example: Return consultation
+        status:
           type: string
-          description: Street of the user
-          minLength: 5
-          maxLength: 50
-          example: Street 01
-        number:
-          type: integer
-          description: Street number of the user
-          minLength: 1
-          maxLength: 5
-          example: 1001
-        city:
-          type: string
-          description: City of the user
-          minLength: 3
-          maxLength: 50
-          example: Jundiaí
-        state:
-          type: string
-          description: State of the user
-          minLength: 2
-          maxLength: 50
-          example: São Paulo
-        country:
-          type: string
-          description: Country of the user
-          minLength: 2
-          maxLength: 50
-          example: Brazil
-    LoginUser:
-      type: object
-      required:
-        - login
-        - password
-      properties:
-        login:
-          type: string
-          description: Login of the user
-          minLength: 5
-          maxLength: 30
-          example: rincon123
-        password:
-          type: string
-          description: Password of the user
-          minLength: 5
-          maxLength: 30
-          example: strongPassword123
-    LoginResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          description: JWT token
-    ChangePassword:
-      type: object
-      properties:
-        old-password:
-          type: string
-        new-password:
-          type: string
+          description: Status of the schedule
+          example: SCHEDULE

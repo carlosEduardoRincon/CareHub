@@ -16,6 +16,8 @@ spring:
   sql:
     init:
       continue-on-error: true
+  kafka:
+    bootstrap-servers: localhost:9092
 
 logging:
   level:
@@ -23,7 +25,7 @@ logging:
       flywaydb: DEBUG
       springframework:
   swagger-ui:
-    url: /api/users.yaml
+    url: /api/patients.yaml
 
 api:
   security:
