@@ -1,6 +1,7 @@
 package com.care.hub.services;
 
 import com.care.hub.data.entities.Schedule;
+import com.care.hub.data.repositories.ScheduleConflictRepository;
 import com.care.hub.data.repositories.ScheduleJdbcRepository;
 import com.carehub.schedules.model.CreateScheduleDTO;
 import com.carehub.schedules.model.PaginatedSchedulesDTO;
@@ -20,11 +21,24 @@ public class ScheduleService {
     @Autowired
     private ScheduleJdbcRepository scheduleRepository;
 
+    @Autowired
+    private ScheduleConflictRepository scheduleConflictRepository;
+
     public ScheduleDTO createSchedule(CreateScheduleDTO body) {
+        var dateTime = body.getScheduleDate();
+        var date = dateTime.toLocalDate();
+        var time = dateTime.toLocalTime();
+        var doctorId = body.getDoctorId();
+
+        if (scheduleConflictRepository.existsByDoctorAndDateTime(doctorId, date, time)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um agendamento para este médico neste horário.");
+        }
+
         var entity = new Schedule()
-                .setDoctorId(body.getDoctorId())
+                .setDoctorId(doctorId)
                 .setPatientId(body.getPatientId())
-                .setScheduleDate(body.getScheduleDate().toLocalDate())
+                .setScheduleDate(date)
+                .setScheduleHour(time)
                 .setObservation(body.getObservation());
 
         var saved = scheduleRepository.save(entity);
