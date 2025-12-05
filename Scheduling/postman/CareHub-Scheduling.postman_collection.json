@@ -1,0 +1,364 @@
+{
+  "info": {
+    "name": "Care Hub Scheduling API",
+    "_postman_id": "c3d7b2b0-7f1a-4f4a-9b8e-6c2d25b2a0a1",
+    "description": "Coleção Postman para testar as rotas do serviço de Scheduling (Doctors, Patients, Nurses, Schedules).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "doctorId",
+      "value": "1"
+    },
+    {
+      "key": "patientId",
+      "value": "1"
+    },
+    {
+      "key": "nurseId",
+      "value": "1"
+    },
+    {
+      "key": "scheduleId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Doctors",
+      "item": [
+        {
+          "name": "Create Doctor",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. John Doe\",\n  \"email\": \"john.doe@carehub.com\",\n  \"login\": \"jdoe\",\n  \"password\": \"secret123\",\n  \"cpf\": \"12345678900\",\n  \"crm\": \"CRM-12345\",\n  \"speciality\": \"CARDIOLOGY\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/doctors",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors"]
+            }
+          }
+        },
+        {
+          "name": "Get Doctor by Id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/doctors/{{doctorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "{{doctorId}}"]
+            }
+          }
+        },
+        {
+          "name": "List Doctors (paginated)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/doctors?page=0&perPage=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "perPage", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Doctor",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dr. John Updated\",\n  \"email\": \"john.updated@carehub.com\",\n  \"speciality\": \"DERMATOLOGY\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/doctors/{{doctorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "{{doctorId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Doctor",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/doctors/{{doctorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["doctors", "{{doctorId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Patients",
+      "item": [
+        {
+          "name": "Create Patient",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane.doe@carehub.com\",\n  \"birthDate\": \"1990-05-10\",\n  \"address\": \"Rua A, 123\",\n  \"telephone\": \"+55 11 99999-0000\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"]
+            }
+          }
+        },
+        {
+          "name": "Get Patient by Id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}"]
+            }
+          }
+        },
+        {
+          "name": "List Patients (paginated)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/patients?page=0&perPage=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "perPage", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Patient",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe Updated\",\n  \"email\": \"jane.updated@carehub.com\",\n  \"address\": \"Rua B, 456\",\n  \"telephone\": \"+55 11 98888-7777\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Patient",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/patients/{{patientId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["patients", "{{patientId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Nurses",
+      "item": [
+        {
+          "name": "Create Nurse",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nurse Mary\",\n  \"login\": \"mnurse\",\n  \"password\": \"secret123\",\n  \"cpf\": \"98765432100\",\n  \"coren\": \"COREN-54321\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/nurses",
+              "host": ["{{baseUrl}}"],
+              "path": ["nurses"]
+            }
+          }
+        },
+        {
+          "name": "Get Nurse by Id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/nurses/{{nurseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["nurses", "{{nurseId}}"]
+            }
+          }
+        },
+        {
+          "name": "List Nurses (paginated)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/nurses?page=0&perPage=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["nurses"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "perPage", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Nurse",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nurse Mary Updated\",\n  \"cpf\": \"98765432100\",\n  \"coren\": \"COREN-99999\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/nurses/{{nurseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["nurses", "{{nurseId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Nurse",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/nurses/{{nurseId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["nurses", "{{nurseId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Schedules",
+      "item": [
+        {
+          "name": "Create Schedule",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"doctorId\": 1,\n  \"patientId\": 1,\n  \"scheduleDate\": \"2025-01-10T15:00:00Z\",\n  \"observation\": \"Consulta de rotina\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/schedules",
+              "host": ["{{baseUrl}}"],
+              "path": ["schedules"]
+            }
+          }
+        },
+        {
+          "name": "Get Schedule by Id",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/schedules/{{scheduleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["schedules", "{{scheduleId}}"]
+            }
+          }
+        },
+        {
+          "name": "List Schedules (paginated)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/schedules?page=0&perPage=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["schedules"],
+              "query": [
+                { "key": "page", "value": "0" },
+                { "key": "perPage", "value": "10" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Schedule",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Accept", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"scheduleDate\": \"2025-01-15T16:00:00Z\",\n  \"observation\": \"Ajuste de horário\",\n  \"status\": \"SCHEDULED\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/schedules/{{scheduleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["schedules", "{{scheduleId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Schedule",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Accept", "value": "application/json" }],
+            "url": {
+              "raw": "{{baseUrl}}/schedules/{{scheduleId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["schedules", "{{scheduleId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
