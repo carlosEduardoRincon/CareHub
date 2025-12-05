@@ -2,6 +2,7 @@ package com.care.hub.services;
 
 import com.care.hub.data.entities.Doctor;
 import com.care.hub.data.repositories.DoctorJdbcRepository;
+import com.care.hub.data.repositories.UserJdbcRepository;
 import com.care.hub.mappers.DoctorMapper;
 import com.carehub.doctors.model.CreateDoctorDTO;
 import com.carehub.doctors.model.DoctorDTO;
@@ -20,6 +21,9 @@ public class DoctorService {
     @Autowired
     private DoctorJdbcRepository doctorRepository;
 
+    @Autowired
+    private UserJdbcRepository userRepository;
+
     public DoctorDTO createDoctor(CreateDoctorDTO body) {
         var entity = new Doctor()
                 .setName(body.getName())
@@ -29,6 +33,12 @@ public class DoctorService {
                 .setCpf(body.getCpf())
                 .setCrm(body.getCrm())
                 .setSpeciality(body.getSpeciality().toString());
+
+        var user = new com.care.hub.data.entities.User();
+        user.setUsername(body.getLogin());
+        user.setPassword(body.getPassword());
+        user.setRoles(java.util.List.of("ROLE_DOCTOR"));
+        userRepository.save(user);
 
         var saved = doctorRepository.save(entity);
         return DoctorMapper.toDTO(saved);

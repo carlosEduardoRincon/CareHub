@@ -20,6 +20,9 @@ public class PatientService {
     @Autowired
     private PatientJdbcRepository patientRepository;
 
+    @Autowired
+    private com.care.hub.data.repositories.UserJdbcRepository userRepository;
+
     public PatientDTO createPatient(CreatePatientDTO body) {
         var patient = new Patient();
         patient.setName(body.getName());
@@ -27,6 +30,13 @@ public class PatientService {
         patient.setBirthDate(body.getBirthDate());
         patient.setAddress(body.getAddress());
         patient.setTelephone(body.getTelephone());
+
+        var user = new com.care.hub.data.entities.User();
+        user.setUsername(body.getEmail());
+        user.setPassword(java.util.UUID.randomUUID().toString());
+        user.setRoles(java.util.List.of("ROLE_PATIENT"));
+        userRepository.save(user);
+        patient.setUserId(user.getId());
 
         var savedId = patientRepository.save(patient);
         patient.setId(savedId.getId());

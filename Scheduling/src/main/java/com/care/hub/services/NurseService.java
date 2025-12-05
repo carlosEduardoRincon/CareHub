@@ -2,6 +2,7 @@ package com.care.hub.services;
 
 import com.care.hub.data.entities.Nurse;
 import com.care.hub.data.repositories.NurseJdbcRepository;
+import com.care.hub.data.repositories.UserJdbcRepository;
 import com.carehub.nurses.model.CreateNurseDTO;
 import com.carehub.nurses.model.NurseDTO;
 import com.carehub.nurses.model.PaginatedNursesDTO;
@@ -19,6 +20,9 @@ public class NurseService {
     @Autowired
     private NurseJdbcRepository nurseRepository;
 
+    @Autowired
+    private UserJdbcRepository userRepository;
+
     public NurseDTO createNurse(CreateNurseDTO body) {
         var entity = new Nurse()
                 .setName(body.getName())
@@ -26,6 +30,12 @@ public class NurseService {
                 .setPassword(body.getPassword())
                 .setCpf(body.getCpf())
                 .setCoren(body.getCoren());
+
+        var user = new com.care.hub.data.entities.User();
+        user.setUsername(body.getLogin());
+        user.setPassword(body.getPassword());
+        user.setRoles(java.util.List.of("ROLE_NURSE"));
+        userRepository.save(user);
 
         var saved = nurseRepository.save(entity);
         return com.care.hub.mappers.NurseMapper.toDTO(saved);
