@@ -170,14 +170,9 @@ components:
           example: 7
         scheduleDate:
           type: string
-          format: date
+          format: date-time
           description: Date of the schedule
           example: 2025-08-10
-        scheduleHour:
-          type: string
-          format: time
-          description: Hour of the schedule
-          example: "14:30"
         observation:
           type: string
           description: Optional observation about the appointment
@@ -189,14 +184,9 @@ components:
       properties:
         scheduleDate:
           type: string
-          format: date
+          format: date-time
           description: Date of the schedule
           example: 2025-08-11
-        scheduleHour:
-          type: string
-          format: time
-          description: Hour of the schedule
-          example: "16:00"
         observation:
           type: string
           description: Optional observation
@@ -245,14 +235,9 @@ components:
           example: 7
         scheduleDate:
           type: string
-          format: date
+          format: date-time
           description: Date of the schedule
           example: 2025-08-10
-        scheduleHour:
-          type: string
-          format: time
-          description: Hour of the schedule
-          example: "14:30"
         observation:
           type: string
           description: Optional observation
