@@ -2,7 +2,7 @@ spring:
   profiles:
     active: local
   application:
-    name: CareHub
+    name: CareHub-Notification
   datasource:
     url: jdbc:postgresql://carehub_db:5432/carehub
     username: carehub
@@ -36,6 +36,37 @@ logging:
   swagger-ui:
     url: /api/users.yaml
 
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://carehub_db:5432/carehub}
+    username: ${DB_USER:carehub}
+    password: ${DB_PASSWORD:carehub123}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: notification-service
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.use.type.headers: false
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:1025}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:false}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS:false}
+
+notification:
+  job:
+    enabled: ${NOTIFICATION_JOB_ENABLED:true}
+    fixed-delay-ms: ${NOTIFICATION_JOB_FIXED_DELAY_MS:300000}
+    upcoming-window-minutes: ${NOTIFICATION_JOB_WINDOW_MINUTES:60}
 api:
   security:
     token:
