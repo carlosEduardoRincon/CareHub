@@ -10,6 +10,7 @@ import com.carehub.doctors.model.PaginatedDoctorsDTO;
 import com.carehub.doctors.model.UpdateDoctorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -24,6 +25,9 @@ public class DoctorService {
     @Autowired
     private UserJdbcRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public DoctorDTO createDoctor(CreateDoctorDTO body) {
         var entity = new Doctor()
                 .setName(body.getName())
@@ -36,7 +40,7 @@ public class DoctorService {
 
         var user = new com.care.hub.data.entities.User();
         user.setUsername(body.getLogin());
-        user.setPassword(body.getPassword());
+        user.setPassword(passwordEncoder.encode(body.getPassword()));
         user.setRoles(java.util.List.of("ROLE_DOCTOR"));
         userRepository.save(user);
 

@@ -4,6 +4,7 @@ import com.carehub.patients.model.CreatePatientDTO;
 import com.carehub.patients.model.PatientDTO;
 import com.carehub.patients.model.PaginatedPatientsDTO;
 import com.carehub.patients.model.UpdatePatientDTO;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.care.hub.data.entities.Patient;
 import com.care.hub.data.repositories.PatientJdbcRepository;
@@ -23,6 +24,9 @@ public class PatientService {
     @Autowired
     private com.care.hub.data.repositories.UserJdbcRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public PatientDTO createPatient(CreatePatientDTO body) {
         var patient = new Patient();
         patient.setName(body.getName());
@@ -33,7 +37,8 @@ public class PatientService {
 
         var user = new com.care.hub.data.entities.User();
         user.setUsername(body.getEmail());
-        user.setPassword(java.util.UUID.randomUUID().toString());
+        String rawPassword = java.util.UUID.randomUUID().toString();
+        user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRoles(java.util.List.of("ROLE_PATIENT"));
         userRepository.save(user);
         patient.setUserId(user.getId());
