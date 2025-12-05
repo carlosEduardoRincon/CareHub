@@ -28,13 +28,13 @@ public class NurseService {
                 .setCoren(body.getCoren());
 
         var saved = nurseRepository.save(entity);
-        return toDTO(saved);
+        return com.care.hub.mappers.NurseMapper.toDTO(saved);
     }
 
     public NurseDTO findById(Long nurseId) {
         var entity = nurseRepository.findById(nurseId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Nurse not found"));
-        return toDTO(entity);
+        return com.care.hub.mappers.NurseMapper.toDTO(entity);
     }
 
     public PaginatedNursesDTO listNurses(Integer page, Integer perPage) {
@@ -48,7 +48,7 @@ public class NurseService {
         dto.setPage(p);
         dto.setPerPage(pp);
         dto.setTotal((long) total);
-        dto.setItems(items.stream().map(this::toDTO).collect(Collectors.toList()));
+        dto.setItems(items.stream().map(com.care.hub.mappers.NurseMapper::toDTO).collect(Collectors.toList()));
         return dto;
     }
 
@@ -61,20 +61,11 @@ public class NurseService {
         if (body.getCoren() != null) entity.setCoren(body.getCoren());
 
         nurseRepository.update(entity);
-        return toDTO(entity);
+        return com.care.hub.mappers.NurseMapper.toDTO(entity);
     }
 
     public void deleteNurse(Long nurseId) {
         nurseRepository.deleteById(nurseId);
     }
 
-    private NurseDTO toDTO(Nurse entity) {
-        var dto = new NurseDTO();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setLogin(entity.getLogin());
-        dto.setCpf(entity.getCpf());
-        dto.setCoren(entity.getCoren());
-        return dto;
-    }
 }

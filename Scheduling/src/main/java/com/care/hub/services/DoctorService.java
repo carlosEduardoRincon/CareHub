@@ -2,6 +2,7 @@ package com.care.hub.services;
 
 import com.care.hub.data.entities.Doctor;
 import com.care.hub.data.repositories.DoctorJdbcRepository;
+import com.care.hub.mappers.DoctorMapper;
 import com.carehub.doctors.model.CreateDoctorDTO;
 import com.carehub.doctors.model.DoctorDTO;
 import com.carehub.doctors.model.PaginatedDoctorsDTO;
@@ -30,13 +31,13 @@ public class DoctorService {
                 .setSpeciality(body.getSpeciality().toString());
 
         var saved = doctorRepository.save(entity);
-        return toDTO(saved);
+        return DoctorMapper.toDTO(saved);
     }
 
     public DoctorDTO findById(Long doctorId) {
         var entity = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found"));
-        return toDTO(entity);
+        return DoctorMapper.toDTO(entity);
     }
 
     public PaginatedDoctorsDTO listDoctors(Integer page, Integer perPage) {
@@ -50,7 +51,7 @@ public class DoctorService {
         dto.setPage(p);
         dto.setPerPage(pp);
         dto.setTotal((long) total);
-        dto.setItems(items.stream().map(this::toDTO).collect(Collectors.toList()));
+        dto.setItems(items.stream().map(DoctorMapper::toDTO).collect(Collectors.toList()));
         return dto;
     }
 
@@ -63,22 +64,10 @@ public class DoctorService {
         if (body.getSpeciality() != null) entity.setSpeciality(body.getSpeciality().toString());
 
         doctorRepository.update(entity);
-        return toDTO(entity);
+        return DoctorMapper.toDTO(entity);
     }
 
     public void deleteDoctor(Long doctorId) {
         doctorRepository.deleteById(doctorId);
-    }
-
-    private DoctorDTO toDTO(Doctor entity) {
-        var dto = new DoctorDTO();
-        dto.setId(entity.getId());
-        dto.setName(entity.getName());
-        dto.setEmail(entity.getEmail());
-        dto.setLogin(entity.getLogin());
-        dto.setCpf(entity.getCpf());
-        dto.setCrm(entity.getCrm());
-        dto.setSpeciality(DoctorDTO.SpecialityEnum.fromValue(entity.getSpeciality()));
-        return dto;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,10 +24,8 @@ public class ScheduleService {
         var entity = new Schedule()
                 .setDoctorId(body.getDoctorId())
                 .setPatientId(body.getPatientId())
-                .setScheduleDate(body.getScheduleDate())
-                .setScheduleHour(body.getScheduleHour())
-                .setObservation(body.getObservation())
-                .setStatus(body.getStatus());
+                .setScheduleDate(body.getScheduleDate().toLocalDate())
+                .setObservation(body.getObservation());
 
         var saved = scheduleRepository.save(entity);
         return toDTO(saved);
@@ -57,8 +56,7 @@ public class ScheduleService {
         var entity = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
 
-        if (body.getScheduleDate() != null) entity.setScheduleDate(body.getScheduleDate());
-        if (body.getScheduleHour() != null) entity.setScheduleHour(body.getScheduleHour());
+        if (body.getScheduleDate() != null) entity.setScheduleDate(body.getScheduleDate().toLocalDate());
         if (body.getObservation() != null) entity.setObservation(body.getObservation());
         if (body.getStatus() != null) entity.setStatus(body.getStatus());
 
@@ -75,8 +73,7 @@ public class ScheduleService {
         dto.setId(entity.getId());
         dto.setDoctorId(entity.getDoctorId());
         dto.setPatientId(entity.getPatientId());
-        dto.setScheduleDate(entity.getScheduleDate());
-        dto.setScheduleHour(entity.getScheduleHour());
+        dto.setScheduleDate(OffsetDateTime.from(entity.getScheduleDate()));
         dto.setObservation(entity.getObservation());
         dto.setStatus(entity.getStatus());
         return dto;
