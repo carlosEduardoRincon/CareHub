@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: carehub-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-carehub}
+      POSTGRES_USER: ${POSTGRES_USER:-<usuario-db>}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-<senha-db>}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - backend
+
+  notification:
+    build:
+      context: .
+      dockerfile: Notification/Dockerfile
+      args:
+        JAVA_VERSION: "24"
+    image: carehub-notification:latest
+    container_name: carehub-notification
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-carehub}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-<usuario-db>}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-<senha-db>}
+      SERVER_PORT: "8081"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    restart: unless-stopped
+    networks:
+      - backend
+
+  scheduling:
+    build:
+      context: .
+      dockerfile: Scheduling/Dockerfile
+      args:
+        JAVA_VERSION: "24"
+    image: carehub-scheduling:latest
+    container_name: carehub-scheduling
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-docker}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-carehub}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-<usuario-db>}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:-<senha-db>}
+      SERVER_PORT: "8082"
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8082:8082"
+    restart: unless-stopped
+    networks:
+      - backend
+
+volumes:
+  db-data:
+
+networks:
+  backend:
