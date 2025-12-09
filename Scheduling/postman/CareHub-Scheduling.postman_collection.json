@@ -1,33 +1,73 @@
 {
   "info": {
-    "name": "Care Hub Scheduling API",
-    "_postman_id": "c3d7b2b0-7f1a-4f4a-9b8e-6c2d25b2a0a1",
-    "description": "Coleção Postman para testar as rotas do serviço de Scheduling (Doctors, Patients, Nurses, Schedules).",
+    "_postman_id": "f7a1b5b4-1234-4abc-9def-111122223333",
+    "name": "CareHub Scheduling API",
+    "description": "Coleção Postman unificada com autenticação JWT e rotas de Doctors, Patients, Nurses e Schedules.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:8080"
-    },
-    {
-      "key": "doctorId",
-      "value": "1"
-    },
-    {
-      "key": "patientId",
-      "value": "1"
-    },
-    {
-      "key": "nurseId",
-      "value": "1"
-    },
-    {
-      "key": "scheduleId",
-      "value": "1"
-    }
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "jwt", "value": "" },
+    { "key": "doctorId", "value": "1" },
+    { "key": "patientId", "value": "1" },
+    { "key": "nurseId", "value": "1" },
+    { "key": "scheduleId", "value": "1" }
   ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt}}",
+        "type": "string"
+      }
+    ]
+  },
   "item": [
+    {
+      "name": "Auth - Login",
+      "request": {
+        "auth": { "type": "noauth" },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"username\": \"\",\n  \"password\": \"\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "login"]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {",
+              "  try {",
+              "    const json = pm.response.json();",
+              "    if (json && json.token) {",
+              "      pm.collectionVariables.set('jwt', json.token);",
+              "      console.log('JWT salvo em collectionVariables.jwt');",
+              "    }",
+              "  } catch (e) {",
+              "    console.warn('Falha ao ler token da resposta:', e);",
+              "  }",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
     {
       "name": "Doctors",
       "item": [
