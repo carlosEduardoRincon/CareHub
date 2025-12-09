@@ -263,18 +263,6 @@ components:
           minLength: 5
           maxLength: 50
           example: example@email.com.br
-        login:
-          type: string
-          description: Login of the patient
-          minLength: 5
-          maxLength: 30
-          example: rincon123
-        password:
-          type: string
-          description: Password of the patient
-          minLength: 5
-          maxLength: 30
-          example: strongPassword123
         address:
           type: string
           description: Address of the patient

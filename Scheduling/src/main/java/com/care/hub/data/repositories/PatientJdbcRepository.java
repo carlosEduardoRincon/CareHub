@@ -22,31 +22,35 @@ public class PatientJdbcRepository {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcClient.sql("""
-                INSERT INTO patients (name, email, birth_date, address, telephone, user_id)
-                VALUES (:name, :email, :birth_date, :address, :telephone, :user_id)
+                INSERT INTO patients (name, email, birth_date, address, telephone, nr_seq_user)
+                VALUES (:name, :email, :birth_date, :address, :telephone, :nr_seq_user)
                 """)
                 .param("name", patient.getName())
                 .param("email", patient.getEmail())
                 .param("birth_date", Date.valueOf(patient.getBirthDate()))
                 .param("address", patient.getAddress())
                 .param("telephone", patient.getTelephone())
-                .param("user_id", patient.getUserId())
+                .param("nr_seq_user", patient.getUserId())
                 .update(keyHolder);
 
-        Number generatedId = keyHolder.getKey();
-        if (generatedId != null) {
-            patient.setId(generatedId.longValue());
+        var keys = keyHolder.getKeys();
+        assert keys != null;
+
+        var id = keys.get("nr_seq_patient");
+        if (id != null) {
+            patient.setId(((Number)id).longValue());
         }
+
         return patient;
     }
 
     public Optional<Patient> findById(Long id) {
         return jdbcClient.sql("""
-                        SELECT id, name, email, birth_date, address, telephone, user_id
+                        SELECT nr_seq_patient, name, email, birth_date, address, telephone
                         FROM patients
-                        WHERE id = :id
+                        WHERE nr_seq_patient = :nr_seq_patient
                         """)
-                .param("id", id)
+                .param("nr_seq_patient", id)
                 .query(new PatientRowMapper())
                 .optional();
     }
@@ -54,7 +58,7 @@ public class PatientJdbcRepository {
     public List<Patient> findAll(int page, int perPage) {
         int offset = page * perPage;
         return jdbcClient.sql("""
-                        SELECT id, name, email, birth_date, address, telephone, user_id
+                        SELECT nr_seq_patient, name, email, birth_date, address, telephone
                         FROM patients
                         LIMIT :limit OFFSET :offset
                         """)
@@ -78,20 +82,20 @@ public class PatientJdbcRepository {
                             birth_date = :birth_date,
                             address = :address,
                             telephone = :telephone
-                        WHERE id = :id
+                        WHERE nr_seq_patient = :nr_seq_patient
                         """)
                 .param("name", patient.getName())
                 .param("email", patient.getEmail())
                 .param("birth_date", Date.valueOf(patient.getBirthDate()))
                 .param("address", patient.getAddress())
                 .param("telephone", patient.getTelephone())
-                .param("id", patient.getId())
+                .param("nr_seq_patient", patient.getId())
                 .update();
     }
 
     public void deleteById(Long id) {
-        jdbcClient.sql("DELETE FROM patients WHERE id = :id")
-                .param("id", id)
+        jdbcClient.sql("DELETE FROM patients WHERE nr_seq_patient = :nr_seq_patient")
+                .param("nr_seq_patient", id)
                 .update();
     }
 }
