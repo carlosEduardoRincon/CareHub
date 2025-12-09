@@ -29,13 +29,13 @@ public class UserJdbcRepository {
                 .update(keyHolder);
 
         var keys = keyHolder.getKeys();
-        Objects.requireNonNull(keys, "Falha ao obter chaves geradas na inserção de users");
+        Objects.requireNonNull(keys, "Failed to obtain generated keys when inserting into users");
         var rawId = keys.get("nr_seq_user");
         if (rawId == null && keys.size() == 1) {
             rawId = keys.values().iterator().next();
         }
         if (!(rawId instanceof Number)) {
-            throw new IllegalStateException("Chave gerada nr_seq_user inválida: " + rawId);
+            throw new IllegalStateException("Invalid generated key nr_seq_user: " + rawId);
         }
         var userId = ((Number) rawId).longValue();
         user.setId(userId);

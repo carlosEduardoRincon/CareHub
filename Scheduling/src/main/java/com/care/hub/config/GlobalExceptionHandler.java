@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<Map<String, Object>> handleDuplicateKey(DuplicateKeyException ex, HttpServletRequest request) {
         return build(HttpStatus.CONFLICT,
-                "Registro já existe (violação de chave única).",
+                "Record already exists (unique key violation).",
                 request.getRequestURI(),
                 null);
     }
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<Map<String, Object>> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
         return build(HttpStatus.CONFLICT,
-                "Violação de integridade de dados.",
+                "Data integrity violation.",
                 request.getRequestURI(),
                 null);
     }
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
                 .toList();
 
         return build(HttpStatus.BAD_REQUEST,
-                "Erro de validação dos campos.",
+                "Field validation error.",
                 request.getRequestURI(),
                 fieldErrors);
     }
@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
                 .toList();
 
         return build(HttpStatus.BAD_REQUEST,
-                "Erro de validação.",
+                "Validation error.",
                 request.getRequestURI(),
                 fieldErrors);
     }
@@ -81,10 +81,9 @@ public class GlobalExceptionHandler {
         m.put("code", fe.getCode());
         Object rejected = fe.getRejectedValue();
 
-        // Evitar expor dados sensíveis (password/senha). Caso contrário, incluir o valor rejeitado.
         if (rejected != null) {
             String f = fe.getField();
-            if ("password".equalsIgnoreCase(f) || "senha".equalsIgnoreCase(f)) {
+            if ("password".equalsIgnoreCase(f)) {
                 m.put("rejectedValue", "***");
             } else {
                 m.put("rejectedValue", rejected);
