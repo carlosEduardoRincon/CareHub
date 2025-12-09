@@ -151,11 +151,6 @@ components:
           description: Name of the nurse
           maxLength: 100
           example: Carlos
-        cpf:
-          type: string
-          description: CPF of the nurse
-          maxLength: 14
-          example: 121.323.232-11
         coren:
           type: string
           description: COREN of the nurse
@@ -192,16 +187,6 @@ components:
           description: Name of the nurse
           maxLength: 100
           example: Carlos
-        login:
-          type: string
-          description: Login of the nurse
-          maxLength: 30
-          example: rincon123
-        cpf:
-          type: string
-          description: CPF of the nurse
-          maxLength: 14
-          example: 121.323.232-11
         coren:
           type: string
           description: COREN of the nurse
@@ -226,11 +211,6 @@ components:
           minLength: 5
           maxLength: 30
           example: strongPassword123
-        cpf:
-          type: string
-          description: CPF of the nurse
-          maxLength: 14
-          example: 121.323.232-11
         coren:
           type: string
           description: COREN of the nurse

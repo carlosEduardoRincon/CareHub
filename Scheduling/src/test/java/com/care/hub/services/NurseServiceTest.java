@@ -34,9 +34,6 @@ class NurseServiceTest {
         var entity = new Nurse()
                 .setId(2L)
                 .setName("Clara")
-                .setLogin("clara")
-                .setPassword("secret")
-                .setCpf("12345678900")
                 .setCoren("COREN123");
 
         when(nurseRepository.findById(2L)).thenReturn(Optional.of(entity));
@@ -63,9 +60,6 @@ class NurseServiceTest {
         var entity = new Nurse()
                 .setId(10L)
                 .setName("Amy")
-                .setLogin("amy")
-                .setPassword("pwd")
-                .setCpf("11122233344")
                 .setCoren("COREN999");
 
         when(nurseRepository.findAll(0, 10)).thenReturn(List.of(entity));

@@ -9,13 +9,12 @@ import java.sql.SQLException;
 public class NurseRowMapper implements RowMapper<Nurse> {
     @Override
     public Nurse mapRow(ResultSet rs, int rowNum) throws SQLException {
-        var e = new Nurse();
-        e.setId(rs.getLong("id"));
-        e.setName(rs.getString("name"));
-        e.setLogin(rs.getString("login"));
-        e.setPassword(rs.getString("password"));
-        e.setCpf(rs.getString("cpf"));
-        e.setCoren(rs.getString("coren"));
-        return e;
+        var nurse = new Nurse();
+
+        nurse.setId(rs.getLong("nr_seq_nurse"));
+        nurse.setName(rs.getString("name"));
+        nurse.setCoren(rs.getString("coren"));
+
+        return nurse;
     }
 }

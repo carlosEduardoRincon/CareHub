@@ -1,6 +1,7 @@
 package com.care.hub.services;
 
 import com.care.hub.data.entities.Doctor;
+import com.care.hub.data.entities.User;
 import com.care.hub.data.repositories.DoctorJdbcRepository;
 import com.care.hub.data.repositories.UserJdbcRepository;
 import com.care.hub.mappers.DoctorMapper;
@@ -35,7 +36,7 @@ public class DoctorService {
                 .setCrm(body.getCrm())
                 .setSpeciality(body.getSpeciality().toString());
 
-        var user = new com.care.hub.data.entities.User();
+        var user = new User();
         user.setUsername(body.getLogin());
         user.setPassword(passwordEncoder.encode(body.getPassword()));
         user.setRoles(java.util.List.of("ROLE_DOCTOR"));

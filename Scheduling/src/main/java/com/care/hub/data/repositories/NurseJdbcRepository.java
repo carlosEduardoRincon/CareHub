@@ -20,30 +20,32 @@ public class NurseJdbcRepository {
     public Nurse save(Nurse nurse) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcClient.sql("""
-                INSERT INTO nurses (name, login, password, cpf, coren)
-                VALUES (:name, :login, :password, :cpf, :coren)
+                INSERT INTO nurses (name, coren, nr_seq_user)
+                VALUES (:name, :coren, :nr_seq_user)
                 """)
                 .param("name", nurse.getName())
-                .param("login", nurse.getLogin())
-                .param("password", nurse.getPassword())
-                .param("cpf", nurse.getCpf())
                 .param("coren", nurse.getCoren())
+                .param("nr_seq_user", nurse.getUserId())
                 .update(keyHolder);
 
-        Number generatedId = keyHolder.getKey();
-        if (generatedId != null) {
-            nurse.setId(generatedId.longValue());
+        var keys = keyHolder.getKeys();
+        assert keys != null;
+
+        var id = keys.get("nr_seq_nurse");
+        if (id != null) {
+            nurse.setId(((Number)id).longValue());
         }
+
         return nurse;
     }
 
     public Optional<Nurse> findById(Long id) {
         return jdbcClient.sql("""
-                        SELECT id, name, login, password, cpf, coren
+                        SELECT nr_seq_nurse, name, coren
                         FROM nurses
-                        WHERE id = :id
+                        WHERE nr_seq_nurse = :nr_seq_nurse
                         """)
-                .param("id", id)
+                .param("nr_seq_nurse", id)
                 .query(new NurseRowMapper())
                 .optional();
     }
@@ -51,7 +53,7 @@ public class NurseJdbcRepository {
     public List<Nurse> findAll(int page, int perPage) {
         int offset = page * perPage;
         return jdbcClient.sql("""
-                        SELECT id, name, login, password, cpf, coren
+                        SELECT nr_seq_nurse, name, coren
                         FROM nurses
                         LIMIT :limit OFFSET :offset
                         """)
@@ -71,20 +73,18 @@ public class NurseJdbcRepository {
         jdbcClient.sql("""
                         UPDATE nurses
                         SET name = :name,
-                            cpf = :cpf,
                             coren = :coren
-                        WHERE id = :id
+                        WHERE nr_seq_nurse = :nr_seq_nurse
                         """)
                 .param("name", nurse.getName())
-                .param("cpf", nurse.getCpf())
                 .param("coren", nurse.getCoren())
-                .param("id", nurse.getId())
+                .param("nr_seq_nurse", nurse.getId())
                 .update();
     }
 
     public void deleteById(Long id) {
-        jdbcClient.sql("DELETE FROM nurses WHERE id = :id")
-                .param("id", id)
+        jdbcClient.sql("DELETE FROM nurses WHERE nr_seq_nurse = :nr_seq_nurse")
+                .param("nr_seq_nurse", id)
                 .update();
     }
 }
