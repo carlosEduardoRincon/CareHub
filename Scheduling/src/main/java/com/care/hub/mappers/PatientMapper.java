@@ -9,13 +9,16 @@ public final class PatientMapper {
 
     public static PatientDTO toDTO(Patient patient) {
         if (patient == null) return null;
-        var dto = new PatientDTO();
-        dto.setId(patient.getId());
-        dto.setName(patient.getName());
-        dto.setEmail(patient.getEmail());
-        dto.setBirthDate(patient.getBirthDate());
-        dto.setAddress(patient.getAddress());
-        dto.setTelephone(patient.getTelephone());
-        return dto;
+
+        var patientDTO = new PatientDTO();
+        patientDTO.setId(patient.getId());
+        patientDTO.setName(patient.getName());
+        patientDTO.setEmail(patient.getEmail());
+        patientDTO.setBirthDate(patient.getBirthDate());
+        patientDTO.setAddress(patient.getAddress());
+        patientDTO.setPassword(patient.getPassword());
+        patientDTO.setTelephone(patient.getTelephone());
+
+        return patientDTO;
     }
 }

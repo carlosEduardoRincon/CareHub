@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -20,33 +22,52 @@ public class ScheduleJdbcRepository {
     private JdbcClient jdbcClient;
 
     public Schedule save(Schedule schedule) {
+        boolean doctorExists = jdbcClient.sql("SELECT COUNT(*) FROM doctors WHERE nr_seq_doctor = :nr_seq_doctor")
+                .param("nr_seq_doctor", schedule.getDoctorId())
+                .query(Integer.class)
+                .single() > 0;
+        if (!doctorExists) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Médico não encontrado.");
+        }
+
+        boolean patientExists = jdbcClient.sql("SELECT COUNT(*) FROM patients WHERE nr_seq_patient = :nr_seq_patient")
+                .param("nr_seq_patient", schedule.getPatientId())
+                .query(Integer.class)
+                .single() > 0;
+        if (!patientExists) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Paciente não encontrado.");
+        }
+
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcClient.sql("""
-                INSERT INTO schedules (doctor_id, patient_id, schedule_date, schedule_hour, observation, status)
-                VALUES (:doctor_id, :patient_id, :schedule_date, :schedule_hour, :observation, :status)
+                INSERT INTO schedules (nr_seq_doctor, nr_seq_patient, schedule_date, observation, status)
+                VALUES (:nr_seq_doctor, :nr_seq_patient, :schedule_date, :observation, :status)
                 """)
-                .param("doctor_id", schedule.getDoctorId())
-                .param("patient_id", schedule.getPatientId())
-                .param("schedule_date", schedule.getScheduleDate() != null ? Date.valueOf(schedule.getScheduleDate()) : null)
-                .param("schedule_hour", schedule.getScheduleHour() != null ? Time.valueOf(schedule.getScheduleHour()) : null)
+                .param("nr_seq_doctor", schedule.getDoctorId())
+                .param("nr_seq_patient", schedule.getPatientId())
+                .param("schedule_date", schedule.getScheduleDate())
                 .param("observation", schedule.getObservation())
                 .param("status", schedule.getStatus())
                 .update(keyHolder);
 
-        Number generatedId = keyHolder.getKey();
-        if (generatedId != null) {
-            schedule.setId(generatedId.longValue());
+        var keys = keyHolder.getKeys();
+        assert keys != null;
+
+        var id = keys.get("nr_seq_schedule");
+        if (id != null) {
+            schedule.setId(((Number)id).longValue());
         }
+
         return schedule;
     }
 
     public Optional<Schedule> findById(Long id) {
         return jdbcClient.sql("""
-                        SELECT id, doctor_id, patient_id, schedule_date, schedule_hour, observation, status
+                        SELECT nr_seq_schedule, nr_seq_doctor, nr_seq_patient, schedule_date, observation, status
                         FROM schedules
-                        WHERE id = :id
+                        WHERE nr_seq_schedule = :nr_seq_schedule
                         """)
-                .param("id", id)
+                .param("nr_seq_schedule", id)
                 .query(new ScheduleRowMapper())
                 .optional();
     }
@@ -54,7 +75,7 @@ public class ScheduleJdbcRepository {
     public List<Schedule> findAll(int page, int perPage) {
         int offset = page * perPage;
         return jdbcClient.sql("""
-                        SELECT id, doctor_id, patient_id, schedule_date, schedule_hour, observation, status
+                        SELECT nr_seq_schedule, nr_seq_doctor, nr_seq_patient, schedule_date, observation, status
                         FROM schedules
                         LIMIT :limit OFFSET :offset
                         """)
@@ -74,22 +95,20 @@ public class ScheduleJdbcRepository {
         jdbcClient.sql("""
                         UPDATE schedules
                         SET schedule_date = :schedule_date,
-                            schedule_hour = :schedule_hour,
                             observation = :observation,
                             status = :status
-                        WHERE id = :id
+                        WHERE nr_seq_schedule = :nr_seq_schedule
                         """)
                 .param("schedule_date", schedule.getScheduleDate() != null ? Date.valueOf(schedule.getScheduleDate()) : null)
-                .param("schedule_hour", schedule.getScheduleHour() != null ? Time.valueOf(schedule.getScheduleHour()) : null)
                 .param("observation", schedule.getObservation())
                 .param("status", schedule.getStatus())
-                .param("id", schedule.getId())
+                .param("nr_seq_schedule", schedule.getId())
                 .update();
     }
 
     public void deleteById(Long id) {
-        jdbcClient.sql("DELETE FROM schedules WHERE id = :id")
-                .param("id", id)
+        jdbcClient.sql("DELETE FROM schedules WHERE nr_seq_schedule = :nr_seq_schedule")
+                .param("nr_seq_schedule", id)
                 .update();
     }
 }

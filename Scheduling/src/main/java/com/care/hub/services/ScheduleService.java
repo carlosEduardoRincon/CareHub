@@ -31,7 +31,7 @@ public class ScheduleService {
         var doctorId = body.getDoctorId();
 
         if (scheduleConflictRepository.existsByDoctorAndDateTime(doctorId, date, time)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Já existe um agendamento para este médico neste horário.");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "There is already an appointment scheduled with this doctor at this time.");
         }
 
         var entity = new Schedule()
@@ -39,7 +39,8 @@ public class ScheduleService {
                 .setPatientId(body.getPatientId())
                 .setScheduleDate(date)
                 .setScheduleHour(time)
-                .setObservation(body.getObservation());
+                .setObservation(body.getObservation())
+                .setStatus("SCHEDULED");
 
         var saved = scheduleRepository.save(entity);
         return toDTO(saved);
@@ -83,13 +84,20 @@ public class ScheduleService {
     }
 
     private ScheduleDTO toDTO(Schedule entity) {
-        var dto = new ScheduleDTO();
-        dto.setId(entity.getId());
-        dto.setDoctorId(entity.getDoctorId());
-        dto.setPatientId(entity.getPatientId());
-        dto.setScheduleDate(OffsetDateTime.from(entity.getScheduleDate()));
-        dto.setObservation(entity.getObservation());
-        dto.setStatus(entity.getStatus());
-        return dto;
+        var scheduleDTO = new ScheduleDTO();
+
+        scheduleDTO.setId(entity.getId());
+        scheduleDTO.setDoctorId(entity.getDoctorId());
+        scheduleDTO.setPatientId(entity.getPatientId());
+        if (entity.getScheduleDate() != null) {
+            var time = entity.getScheduleHour() != null ? entity.getScheduleHour() : java.time.LocalTime.MIDNIGHT;
+            scheduleDTO.setScheduleDate(java.time.OffsetDateTime.of(entity.getScheduleDate(), time, java.time.ZoneOffset.UTC));
+        } else {
+            scheduleDTO.setScheduleDate(null);
+        }
+        scheduleDTO.setObservation(entity.getObservation());
+        scheduleDTO.setStatus(entity.getStatus());
+
+        return scheduleDTO;
     }
 }

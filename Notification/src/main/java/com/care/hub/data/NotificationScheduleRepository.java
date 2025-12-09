@@ -23,7 +23,6 @@ public class NotificationScheduleRepository {
         return jdbcClient.sql("""
                         SELECT s.id,
                                s.schedule_date,
-                               s.schedule_hour,
                                s.observation,
                                p.email AS patient_email,
                                p.name  AS patient_name,
@@ -33,7 +32,6 @@ public class NotificationScheduleRepository {
                         JOIN patients p ON p.id = s.patient_id
                         JOIN doctors d ON d.id = s.doctor_id
                         WHERE s.schedule_date = :date
-                          AND s.schedule_hour BETWEEN :start AND :end
                           AND s.status IN ('CONFIRMED','SCHEDULED')
                         """)
                 .param("date", date)
@@ -47,7 +45,6 @@ public class NotificationScheduleRepository {
         return jdbcClient.sql("""
                         SELECT s.id,
                                s.schedule_date,
-                               s.schedule_hour,
                                s.observation,
                                p.email AS patient_email,
                                p.name  AS patient_name,
@@ -66,16 +63,17 @@ public class NotificationScheduleRepository {
     static class ScheduleNotificationRowMapper implements RowMapper<ScheduleNotification> {
         @Override
         public ScheduleNotification mapRow(ResultSet rs, int rowNum) throws SQLException {
-            ScheduleNotification sn = new ScheduleNotification();
-            sn.setScheduleId(rs.getLong("id"));
-            sn.setDate(rs.getObject("schedule_date", LocalDate.class));
-            sn.setTime(rs.getObject("schedule_hour", LocalTime.class));
-            sn.setObservation(rs.getString("observation"));
-            sn.setPatientEmail(rs.getString("patient_email"));
-            sn.setPatientName(rs.getString("patient_name"));
-            sn.setDoctorEmail(rs.getString("doctor_email"));
-            sn.setDoctorName(rs.getString("doctor_name"));
-            return sn;
+            var scheduleNotification = new ScheduleNotification();
+
+            scheduleNotification.setScheduleId(rs.getLong("id"));
+            scheduleNotification.setDate(rs.getObject("schedule_date", LocalDate.class));
+            scheduleNotification.setObservation(rs.getString("observation"));
+            scheduleNotification.setPatientEmail(rs.getString("patient_email"));
+            scheduleNotification.setPatientName(rs.getString("patient_name"));
+            scheduleNotification.setDoctorEmail(rs.getString("doctor_email"));
+            scheduleNotification.setDoctorName(rs.getString("doctor_name"));
+
+            return scheduleNotification;
         }
     }
 }

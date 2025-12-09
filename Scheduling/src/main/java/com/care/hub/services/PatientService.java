@@ -37,11 +37,12 @@ public class PatientService {
 
         var user = new com.care.hub.data.entities.User();
         user.setUsername(body.getEmail());
-        String rawPassword = java.util.UUID.randomUUID().toString();
+        var rawPassword = java.util.UUID.randomUUID().toString();
         user.setPassword(passwordEncoder.encode(rawPassword));
         user.setRoles(java.util.List.of("ROLE_PATIENT"));
         userRepository.save(user);
         patient.setUserId(user.getId());
+        patient.setPassword(user.getPassword());
 
         var savedId = patientRepository.save(patient);
         patient.setId(savedId.getId());

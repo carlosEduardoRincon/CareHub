@@ -9,6 +9,7 @@ public class Patient {
     private LocalDate birthDate;
     private String address;
     private String telephone;
+    private String password;
     private Long userId;
 
     public Long getId() {
@@ -37,6 +38,10 @@ public class Patient {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public Patient setId(Long id) {
@@ -72,5 +77,9 @@ public class Patient {
     public Patient setUserId(Long userId) {
         this.userId = userId;
         return this;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

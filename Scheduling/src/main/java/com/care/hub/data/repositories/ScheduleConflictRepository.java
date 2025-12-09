@@ -17,14 +17,12 @@ public class ScheduleConflictRepository {
         Integer count = jdbcClient.sql("""
                 SELECT COUNT(1)
                 FROM schedules s
-                WHERE s.doctor_id = :doctorId
+                WHERE s.nr_seq_doctor = :nr_seq_doctor
                   AND s.schedule_date = :date
-                  AND s.schedule_hour = :time
                   AND s.status IN ('CONFIRMED','SCHEDULED')
                 """)
-                .param("doctorId", doctorId)
+                .param("nr_seq_doctor", doctorId)
                 .param("date", date)
-                .param("time", time)
                 .query(Integer.class)
                 .single();
         return count > 0;

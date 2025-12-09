@@ -9,20 +9,15 @@ import java.sql.SQLException;
 public class ScheduleRowMapper implements RowMapper<Schedule> {
     @Override
     public Schedule mapRow(ResultSet rs, int rowNum) throws SQLException {
-        var e = new Schedule();
-        e.setId(rs.getLong("id"));
-        e.setDoctorId(rs.getLong("doctor_id"));
-        e.setPatientId(rs.getLong("patient_id"));
-        var date = rs.getDate("schedule_date");
-        if (date != null) {
-            e.setScheduleDate(date.toLocalDate());
-        }
-        var time = rs.getTime("schedule_hour");
-        if (time != null) {
-            e.setScheduleHour(time.toLocalTime());
-        }
-        e.setObservation(rs.getString("observation"));
-        e.setStatus(rs.getString("status"));
-        return e;
+        var schedule = new Schedule();
+
+        schedule.setId(rs.getLong("nr_seq_schedule"));
+        schedule.setDoctorId(rs.getLong("nr_seq_doctor"));
+        schedule.setPatientId(rs.getLong("nr_seq_patient"));
+        schedule.setScheduleDate(rs.getDate("schedule_date").toLocalDate());
+        schedule.setObservation(rs.getString("observation"));
+        schedule.setStatus(rs.getString("status"));
+
+        return schedule;
     }
 }
