@@ -1,7 +1,7 @@
 package com.care.hub.resources;
 
 import com.care.hub.services.DoctorService;
-import com.carehub.doctors.api.DoctorApi;
+import com.carehub.doctors.api.DoctorsApi;
 import com.carehub.doctors.model.CreateDoctorDTO;
 import com.carehub.doctors.model.DoctorDTO;
 import com.carehub.doctors.model.PaginatedDoctorsDTO;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 
 @RestController
-public class DoctorResource implements DoctorApi {
+public class DoctorResource implements DoctorsApi {
 
     @Autowired
     private DoctorService doctorService;

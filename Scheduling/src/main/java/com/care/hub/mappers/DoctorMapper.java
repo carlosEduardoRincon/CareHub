@@ -13,8 +13,6 @@ public final class DoctorMapper {
         dto.setId(entity.getId());
         dto.setName(entity.getName());
         dto.setEmail(entity.getEmail());
-        dto.setLogin(entity.getLogin());
-        dto.setCpf(entity.getCpf());
         dto.setCrm(entity.getCrm());
         dto.setSpeciality(DoctorDTO.SpecialityEnum.fromValue(entity.getSpeciality()));
         return dto;

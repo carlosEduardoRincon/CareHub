@@ -1,7 +1,7 @@
 package com.care.hub.resources;
 
 import com.care.hub.services.NurseService;
-import com.carehub.nurses.api.NurseApi;
+import com.carehub.nurses.api.NursesApi;
 import com.carehub.nurses.model.CreateNurseDTO;
 import com.carehub.nurses.model.NurseDTO;
 import com.carehub.nurses.model.PaginatedNursesDTO;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 
 @RestController
-public class NurseResource implements NurseApi {
+public class NurseResource implements NursesApi {
 
     @Autowired
     private NurseService nurseService;

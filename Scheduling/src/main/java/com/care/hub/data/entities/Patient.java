@@ -39,31 +39,38 @@ public class Patient {
         return userId;
     }
 
-    public void setId(Long id) {
+    public Patient setId(Long id) {
         this.id = id;
+        return this;
     }
 
-    public void setName(String name) {
+    public Patient setName(String name) {
         this.name = name;
+        return this;
     }
 
-    public void setEmail(String email) {
+    public Patient setEmail(String email) {
         this.email = email;
+        return this;
     }
 
-    public void setBirthDate(LocalDate birthDate) {
+    public Patient setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+        return this;
     }
 
-    public void setAddress(String address) {
+    public Patient setAddress(String address) {
         this.address = address;
+        return this;
     }
 
-    public void setTelephone(String telephone) {
+    public Patient setTelephone(String telephone) {
         this.telephone = telephone;
+        return this;
     }
 
-    public void setUserId(Long userId) {
+    public Patient setUserId(Long userId) {
         this.userId = userId;
+        return this;
     }
 }

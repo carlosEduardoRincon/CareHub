@@ -16,7 +16,7 @@ tags:
   - name: Doctors
     description: Operations related to hospital doctors
 paths:
-  /doctor:
+  /doctors:
     get:
       tags:
         - Doctors
@@ -70,7 +70,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Doctor"
-  /doctor/{doctorId}:
+  /doctors/{doctorId}:
     get:
       tags:
         - Doctors
@@ -205,16 +205,6 @@ components:
           description: E-mail of the doctor
           maxLength: 50
           example: example@email.com.br
-        login:
-          type: string
-          description: Login of the doctor
-          maxLength: 30
-          example: rincon123
-        cpf:
-          type: string
-          description: CPF of the doctor
-          maxLength: 14
-          example: 121.323.232-11
         crm:
           type: string
           description: CRM of the doctor

@@ -16,7 +16,7 @@ tags:
   - name: Patients
     description: Operations related to restaurant patients
 paths:
-  /patient:
+  /patients:
     get:
       tags:
         - Patients
@@ -70,7 +70,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Patient"
-  /patient/{patientId}:
+  /patients/{patientId}:
     get:
       tags:
         - Patients

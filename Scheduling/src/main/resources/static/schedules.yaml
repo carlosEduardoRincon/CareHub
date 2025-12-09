@@ -18,7 +18,7 @@ tags:
     description: Operations related to medical schedules
 
 paths:
-  /schedule:
+  /schedules:
     get:
       tags:
         - Schedules
@@ -74,7 +74,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Schedule"
 
-  /schedule/{scheduleId}:
+  /schedules/{scheduleId}:
     get:
       tags:
         - Schedules

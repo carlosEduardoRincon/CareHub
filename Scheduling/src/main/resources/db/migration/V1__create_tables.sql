@@ -22,7 +22,7 @@ CREATE TABLE doctors (
     name VARCHAR(100),
     email VARCHAR(255),
     crm VARCHAR(20) NOT NULL,
-    specialty VARCHAR(100),
+    speciality VARCHAR(100),
     nr_seq_user BIGINT NOT NULL UNIQUE,
     FOREIGN KEY (nr_seq_user) REFERENCES users(nr_seq_user)
 );

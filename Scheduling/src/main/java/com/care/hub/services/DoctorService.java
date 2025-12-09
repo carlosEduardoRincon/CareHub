@@ -32,9 +32,6 @@ public class DoctorService {
         var entity = new Doctor()
                 .setName(body.getName())
                 .setEmail(body.getEmail())
-                .setLogin(body.getLogin())
-                .setPassword(body.getPassword())
-                .setCpf(body.getCpf())
                 .setCrm(body.getCrm())
                 .setSpeciality(body.getSpeciality().toString());
 
@@ -42,8 +39,9 @@ public class DoctorService {
         user.setUsername(body.getLogin());
         user.setPassword(passwordEncoder.encode(body.getPassword()));
         user.setRoles(java.util.List.of("ROLE_DOCTOR"));
-        userRepository.save(user);
+        var userCreated = userRepository.save(user);
 
+        entity.setUserId(userCreated.getId());
         var saved = doctorRepository.save(entity);
         return DoctorMapper.toDTO(saved);
     }

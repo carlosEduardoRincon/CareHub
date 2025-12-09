@@ -16,7 +16,7 @@ tags:
   - name: Nurses
     description: Operations related to hospital nurses
 paths:
-  /nurse:
+  /nurses:
     get:
       tags:
         - Nurses
@@ -70,7 +70,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Nurse"
-  /nurse/{nurseId}:
+  /nurses/{nurseId}:
     get:
       tags:
         - Nurses

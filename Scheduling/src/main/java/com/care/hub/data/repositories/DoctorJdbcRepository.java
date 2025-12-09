@@ -20,32 +20,34 @@ public class DoctorJdbcRepository {
     public Doctor save(Doctor doctor) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcClient.sql("""
-                INSERT INTO doctors (name, email, login, password, cpf, crm, speciality)
-                VALUES (:name, :email, :login, :password, :cpf, :crm, :speciality)
+                INSERT INTO doctors (name, email, crm, speciality, nr_seq_user)
+                VALUES (:name, :email, :crm, :speciality, :nr_seq_user)
                 """)
                 .param("name", doctor.getName())
                 .param("email", doctor.getEmail())
-                .param("login", doctor.getLogin())
-                .param("password", doctor.getPassword())
-                .param("cpf", doctor.getCpf())
                 .param("crm", doctor.getCrm())
                 .param("speciality", doctor.getSpeciality())
+                .param("nr_seq_user", doctor.getUserId())
                 .update(keyHolder);
 
-        Number generatedId = keyHolder.getKey();
-        if (generatedId != null) {
-            doctor.setId(generatedId.longValue());
+        var keys = keyHolder.getKeys();
+        assert keys != null;
+
+        var id = keys.get("nr_seq_doctor");
+        if (id != null) {
+            doctor.setId(((Number)id).longValue());
         }
+
         return doctor;
     }
 
     public Optional<Doctor> findById(Long id) {
         return jdbcClient.sql("""
-                        SELECT id, name, email, login, password, cpf, crm, speciality
+                        SELECT nr_seq_doctor, name, email, crm, speciality
                         FROM doctors
-                        WHERE id = :id
+                        WHERE nr_seq_doctor = :nr_seq_doctor
                         """)
-                .param("id", id)
+                .param("nr_seq_doctor", id)
                 .query(new DoctorRowMapper())
                 .optional();
     }
@@ -53,7 +55,7 @@ public class DoctorJdbcRepository {
     public List<Doctor> findAll(int page, int perPage) {
         int offset = page * perPage;
         return jdbcClient.sql("""
-                        SELECT id, name, email, login, password, cpf, crm, speciality
+                        SELECT nr_seq_doctor, name, email, crm, speciality
                         FROM doctors
                         LIMIT :limit OFFSET :offset
                         """)
@@ -75,18 +77,18 @@ public class DoctorJdbcRepository {
                         SET name = :name,
                             email = :email,
                             speciality = :speciality
-                        WHERE id = :id
+                        WHERE nr_seq_doctor = :nr_seq_doctor
                         """)
                 .param("name", doctor.getName())
                 .param("email", doctor.getEmail())
                 .param("speciality", doctor.getSpeciality())
-                .param("id", doctor.getId())
+                .param("nr_seq_doctor", doctor.getId())
                 .update();
     }
 
     public void deleteById(Long id) {
-        jdbcClient.sql("DELETE FROM doctors WHERE id = :id")
-                .param("id", id)
+        jdbcClient.sql("DELETE FROM doctors WHERE nr_seq_doctor = :nr_seq_doctor")
+                .param("nr_seq_doctor", id)
                 .update();
     }
 }

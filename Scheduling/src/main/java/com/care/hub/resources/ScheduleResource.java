@@ -1,7 +1,7 @@
 package com.care.hub.resources;
 
 import com.care.hub.services.ScheduleService;
-import com.carehub.schedules.api.ScheduleApi;
+import com.carehub.schedules.api.SchedulesApi;
 import com.carehub.schedules.model.CreateScheduleDTO;
 import com.carehub.schedules.model.ScheduleDTO;
 import com.carehub.schedules.model.PaginatedSchedulesDTO;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.URI;
 
 @RestController
-public class ScheduleResource implements ScheduleApi {
+public class ScheduleResource implements SchedulesApi {
 
     @Autowired
     private ScheduleService scheduleService;
