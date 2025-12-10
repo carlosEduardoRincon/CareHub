@@ -21,7 +21,7 @@ public class NotificationScheduleRepository {
 
     public List<ScheduleNotification> findUpcomingWithin(LocalDate date, LocalTime start, LocalTime end) {
         return jdbcClient.sql("""
-                        SELECT s.id,
+                        SELECT s.nr_seq_schedule,
                                s.schedule_date,
                                s.observation,
                                p.email AS patient_email,
@@ -29,21 +29,19 @@ public class NotificationScheduleRepository {
                                d.email AS doctor_email,
                                d.name  AS doctor_name
                         FROM schedules s
-                        JOIN patients p ON p.id = s.patient_id
-                        JOIN doctors d ON d.id = s.doctor_id
+                        JOIN patients p ON p.nr_seq_patient = s.nr_seq_patient
+                        JOIN doctors d ON d.nr_seq_doctor = s.nr_seq_doctor
                         WHERE s.schedule_date = :date
                           AND s.status IN ('CONFIRMED','SCHEDULED')
                         """)
                 .param("date", date)
-                .param("start", start)
-                .param("end", end)
                 .query(new ScheduleNotificationRowMapper())
                 .list();
     }
 
     public Optional<ScheduleNotification> findByScheduleId(Long scheduleId) {
         return jdbcClient.sql("""
-                        SELECT s.id,
+                        SELECT s.nr_seq_schedule,
                                s.schedule_date,
                                s.observation,
                                p.email AS patient_email,
@@ -51,11 +49,11 @@ public class NotificationScheduleRepository {
                                d.email AS doctor_email,
                                d.name  AS doctor_name
                         FROM schedules s
-                        JOIN patients p ON p.id = s.patient_id
-                        JOIN doctors d ON d.id = s.doctor_id
-                        WHERE s.id = :id
+                        JOIN patients p ON p.nr_seq_patient = s.nr_seq_patient
+                        JOIN doctors d ON d.nr_seq_doctor = s.nr_seq_doctor
+                        WHERE s.nr_seq_schedule = :nr_seq_schedule
                         """)
-                .param("id", scheduleId)
+                .param("nr_seq_schedule", scheduleId)
                 .query(new ScheduleNotificationRowMapper())
                 .optional();
     }
@@ -65,7 +63,7 @@ public class NotificationScheduleRepository {
         public ScheduleNotification mapRow(ResultSet rs, int rowNum) throws SQLException {
             var scheduleNotification = new ScheduleNotification();
 
-            scheduleNotification.setScheduleId(rs.getLong("id"));
+            scheduleNotification.setScheduleId(rs.getLong("nr_seq_schedule"));
             scheduleNotification.setDate(rs.getObject("schedule_date", LocalDate.class));
             scheduleNotification.setObservation(rs.getString("observation"));
             scheduleNotification.setPatientEmail(rs.getString("patient_email"));

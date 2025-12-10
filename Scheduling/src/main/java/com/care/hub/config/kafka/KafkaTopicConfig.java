@@ -26,6 +26,6 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic topicOrderProcessed() {
-        return new NewTopic("notification-care-hub", 2, (short) 1);
+        return new NewTopic("notification-care-hub", 1, (short) 1);
     }
 }

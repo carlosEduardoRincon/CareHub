@@ -2,7 +2,6 @@ package com.care.hub.jobs;
 
 import com.care.hub.data.NotificationScheduleRepository;
 import com.care.hub.email.EmailService;
-import com.care.hub.model.ScheduleNotification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.List;
 
 @Component
 @ConditionalOnProperty(prefix = "notification.job", name = "enabled", havingValue = "true", matchIfMissing = true)
