@@ -18,32 +18,61 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    public void sendAppointmentEmails(ScheduleNotification sn) {
+    public void sendAppointmentEmails(ScheduleNotification scheduleNotification) {
         var subjectPatient = "Confirmação de agendamento | CareHub";
         var bodyPatient = String.format(
                 "Olá %s,\n\nSeu agendamento foi confirmado.\n" +
                 "Médico(a): %s\n" +
-                "Data: %s\nHora: %s\n" +
+                "Data: %s\n" +
                 "Observações: %s\n\n" +
                 "Equipe CareHub.",
-                safe(sn.getPatientName()), safe(sn.getDoctorName()),
-                sn.getDate(), sn.getTime(),
-                safe(sn.getObservation())
+                safe(scheduleNotification.getPatientName()), safe(scheduleNotification.getDoctorName()),
+                scheduleNotification.getDate(),
+                safe(scheduleNotification.getObservation())
         );
-        sendSimple(sn.getPatientEmail(), subjectPatient, bodyPatient);
+        sendSimple(scheduleNotification.getPatientEmail(), subjectPatient, bodyPatient);
 
         var subjectDoctor = "Novo agendamento | CareHub";
         var bodyDoctor = String.format(
                 "Olá %s,\n\nVocê possui um novo agendamento.\n" +
                 "Paciente: %s\n" +
-                "Data: %s\nHora: %s\n" +
+                "Data: %s\n" +
                 "Observações: %s\n\n" +
                 "Equipe CareHub.",
-                safe(sn.getDoctorName()), safe(sn.getPatientName()),
-                sn.getDate(), sn.getTime(),
-                safe(sn.getObservation())
+                safe(scheduleNotification.getDoctorName()), safe(scheduleNotification.getPatientName()),
+                scheduleNotification.getDate(),
+                safe(scheduleNotification.getObservation())
         );
-        sendSimple(sn.getDoctorEmail(), subjectDoctor, bodyDoctor);
+        sendSimple(scheduleNotification.getDoctorEmail(), subjectDoctor, bodyDoctor);
+    }
+
+    public void sendDailyEmails(ScheduleNotification scheduleNotification) {
+        var subjectPatient = "Lembre-se da sua consulta de hoje | CareHub";
+        var bodyPatient = String.format(
+                "Olá %s,\n\nSeu agendamento será hoje.\n" +
+                        "Médico(a): %s\n" +
+                        "Data: %s\n" +
+                        "Observações: %s\n\n" +
+                        "Equipe CareHub.",
+                safe(scheduleNotification.getPatientName()), safe(scheduleNotification.getDoctorName()),
+                scheduleNotification.getDate(),
+                safe(scheduleNotification.getObservation())
+        );
+        sendSimple(scheduleNotification.getPatientEmail(), subjectPatient, bodyPatient);
+
+        var subjectDoctor = "Lembrete consulta %s | CareHub";
+        var bodyDoctor = String.format(
+                "Olá %s,\n\nVocê possui uma consulta marcada para hoje.\n" +
+                        "Paciente: %s\n" +
+                        "Data: %s\n" +
+                        "Observações: %s\n\n" +
+                        "Equipe CareHub.",
+                safe(scheduleNotification.getPatientName()),
+                safe(scheduleNotification.getDoctorName()), safe(scheduleNotification.getPatientName()),
+                scheduleNotification.getDate(),
+                safe(scheduleNotification.getObservation())
+        );
+        sendSimple(scheduleNotification.getDoctorEmail(), subjectDoctor, bodyDoctor);
     }
 
     private void sendSimple(String to, String subject, String text) {

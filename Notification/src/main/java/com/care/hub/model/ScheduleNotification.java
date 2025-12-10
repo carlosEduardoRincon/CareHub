@@ -1,12 +1,12 @@
 package com.care.hub.model;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class ScheduleNotification {
     private Long scheduleId;
-    private LocalDate date;
-    private LocalTime time;
+    private LocalDateTime date;
     private String observation;
     private String patientEmail;
     private String patientName;
@@ -22,21 +22,12 @@ public class ScheduleNotification {
         return this;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public ScheduleNotification setDate(LocalDate date) {
+    public ScheduleNotification setDate(LocalDateTime date) {
         this.date = date;
-        return this;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public ScheduleNotification setTime(LocalTime time) {
-        this.time = time;
         return this;
     }
 

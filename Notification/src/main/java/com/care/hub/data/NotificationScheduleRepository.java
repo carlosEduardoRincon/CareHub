@@ -19,7 +19,7 @@ public class NotificationScheduleRepository {
     @Autowired
     private JdbcClient jdbcClient;
 
-    public List<ScheduleNotification> findUpcomingWithin(LocalDate date, LocalTime start, LocalTime end) {
+    public List<ScheduleNotification> findUpcomingWithin(LocalDate date) {
         return jdbcClient.sql("""
                         SELECT s.nr_seq_schedule,
                                s.schedule_date,
@@ -64,7 +64,7 @@ public class NotificationScheduleRepository {
             var scheduleNotification = new ScheduleNotification();
 
             scheduleNotification.setScheduleId(rs.getLong("nr_seq_schedule"));
-            scheduleNotification.setDate(rs.getObject("schedule_date", LocalDate.class));
+            scheduleNotification.setDate(rs.getTimestamp("schedule_date").toLocalDateTime());
             scheduleNotification.setObservation(rs.getString("observation"));
             scheduleNotification.setPatientEmail(rs.getString("patient_email"));
             scheduleNotification.setPatientName(rs.getString("patient_name"));

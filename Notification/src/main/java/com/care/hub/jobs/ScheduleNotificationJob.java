@@ -32,16 +32,14 @@ public class ScheduleNotificationJob {
     @Scheduled(fixedDelayString = "${notification.job.fixed-delay-ms:300000}")
     public void processUpcomingSchedules() {
         var today = LocalDate.now();
-        var now = LocalTime.now();
-        var end = now.plusMinutes(windowMinutes);
 
-        var items = repository.findUpcomingWithin(today, now, end);
+        var items = repository.findUpcomingWithin(today);
         if (items.isEmpty()) {
-            log.debug("Nenhum agendamento encontrado para enviar e-mails no intervalo de {} minutos.", windowMinutes);
+            log.debug("No scheduled emails were found to be sent within the {} minute interval", windowMinutes);
             return;
         }
-        log.info("Enviando e-mails para {} agendamento(s) nas próximas {} minuto(s).", items.size(), windowMinutes);
+        log.info("Sending emails to {} scheduling(s) in the next {} minute(s).", items.size(), windowMinutes);
 
-        items.forEach(emailService::sendAppointmentEmails);
+        items.forEach(emailService::sendDailyEmails);
     }
 }
