@@ -45,6 +45,26 @@ public class ScheduleEventPublisherAspect {
         }
     }
 
+    @AfterReturning(
+            pointcut = "execution(* com.care.hub.data.repositories..*Schedule*Repository.update(..))",
+            returning = "result"
+    )
+    public void afterScheduleUpdated(Schedule result) {
+        try {
+            Map<String, Object> scheduleData = extractScheduleData(result);
+
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("eventType", "SCHEDULE_UPDATED");
+            payload.put("schedule", scheduleData);
+
+            String key = Optional.ofNullable(scheduleData.get("id")).map(Object::toString).orElse(null);
+            kafkaTemplate.send(TOPIC, key, payload);
+            log.info("Event SCHEDULE_UPDATED posted in topic {} with key {} and payload {}", TOPIC, key, payload);
+        } catch (Exception e) {
+            log.error("Failed to publish SCHEDULE_UPDATED event in Kafka.", e);
+        }
+    }
+
     private Map<String, Object> extractScheduleData(Schedule schedule) {
         Map<String, Object> scheduleMessageHashMap = new HashMap<>();
 
