@@ -45,7 +45,6 @@ notification:
   job:
     enabled: ${NOTIFICATION_JOB_ENABLED:true}
     fixed-delay-ms: ${NOTIFICATION_JOB_FIXED_DELAY_MS:300000}
-    upcoming-window-minutes: ${NOTIFICATION_JOB_WINDOW_MINUTES:60}
 api:
   security:
     token:
