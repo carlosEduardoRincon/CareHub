@@ -2,14 +2,14 @@
 package com.care.hub.data.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class Schedule {
     private Long id;
     private Long doctorId;
     private Long patientId;
-    private LocalDate scheduleDate;
-    private LocalTime scheduleHour;
+    private LocalDateTime scheduleDate;
     private String observation;
     private String status;
 
@@ -40,21 +40,12 @@ public class Schedule {
         return this;
     }
 
-    public LocalDate getScheduleDate() {
+    public LocalDateTime getScheduleDate() {
         return scheduleDate;
     }
 
-    public Schedule setScheduleDate(LocalDate scheduleDate) {
+    public Schedule setScheduleDate(LocalDateTime scheduleDate) {
         this.scheduleDate = scheduleDate;
-        return this;
-    }
-
-    public LocalTime getScheduleHour() {
-        return scheduleHour;
-    }
-
-    public Schedule setScheduleHour(LocalTime scheduleHour) {
-        this.scheduleHour = scheduleHour;
         return this;
     }
 

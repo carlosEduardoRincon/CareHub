@@ -36,7 +36,7 @@ class ScheduleServiceTest {
         when(schedule.getId()).thenReturn(1L);
         when(schedule.getDoctorId()).thenReturn(2L);
         when(schedule.getPatientId()).thenReturn(3L);
-        when(schedule.getScheduleDate()).thenReturn(OffsetDateTime.now().toLocalDate());
+        when(schedule.getScheduleDate()).thenReturn(OffsetDateTime.now().toLocalDate().atStartOfDay());
         when(schedule.getObservation()).thenReturn("observação");
         when(schedule.getStatus()).thenReturn(null);
 
@@ -63,7 +63,7 @@ class ScheduleServiceTest {
         when(schedule.getId()).thenReturn(11L);
         when(schedule.getDoctorId()).thenReturn(22L);
         when(schedule.getPatientId()).thenReturn(33L);
-        when(schedule.getScheduleDate()).thenReturn(OffsetDateTime.now().toLocalDate());
+        when(schedule.getScheduleDate()).thenReturn(OffsetDateTime.now().toLocalDate().atStartOfDay());
         when(schedule.getObservation()).thenReturn("ok");
         when(schedule.getStatus()).thenReturn(null);
 

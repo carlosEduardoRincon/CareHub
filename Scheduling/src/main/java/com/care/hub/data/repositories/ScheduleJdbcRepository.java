@@ -99,7 +99,7 @@ public class ScheduleJdbcRepository {
                             status = :status
                         WHERE nr_seq_schedule = :nr_seq_schedule
                         """)
-                .param("schedule_date", schedule.getScheduleDate() != null ? Date.valueOf(schedule.getScheduleDate()) : null)
+                .param("schedule_date", schedule.getScheduleDate())
                 .param("observation", schedule.getObservation())
                 .param("status", schedule.getStatus())
                 .param("nr_seq_schedule", schedule.getId())

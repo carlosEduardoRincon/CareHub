@@ -1,5 +1,6 @@
 package com.care.hub.kafka;
 
+import com.care.hub.data.entities.Schedule;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class ScheduleEventPublisherAspect {
             pointcut = "execution(* com.care.hub.data.repositories..*Schedule*Repository.save(..))",
             returning = "result"
     )
-    public void afterScheduleSaved(Object result) {
+    public void afterScheduleSaved(Schedule result) {
         try {
             Map<String, Object> scheduleData = extractScheduleData(result);
 
@@ -39,34 +40,22 @@ public class ScheduleEventPublisherAspect {
 
             String key = Optional.ofNullable(scheduleData.get("id")).map(Object::toString).orElse(null);
             kafkaTemplate.send(TOPIC, key, payload);
-            log.info("Evento SCHEDULE_CREATED publicado no tópico {} com chave {} e payload {}", TOPIC, key, payload);
+            log.info("Event SCHEDULE_CREATED posted in topic {} with key {} and payload {}", TOPIC, key, payload);
         } catch (Exception e) {
-            log.error("Falha ao publicar evento SCHEDULE_CREATED no Kafka", e);
+            log.error("Failed to publish SCHEDULE_CREATED event in Kafka.", e);
         }
     }
 
-    private Map<String, Object> extractScheduleData(Object entity) {
-        Map<String, Object> m = new HashMap<>();
-        m.put("id", tryGetter(entity, "getId"));
-        m.put("patientId", tryGetter(entity, "getPatientId"));
-        m.put("doctorId", tryGetter(entity, "getDoctorId"));
-        m.put("nurseId", tryGetter(entity, "getNurseId"));
-        m.put("date", tryGetter(entity, "getDate"));
-        m.put("dateTime", tryGetter(entity, "getDateTime"));
-        m.put("appointmentDate", tryGetter(entity, "getAppointmentDate"));
-        m.put("startTime", tryGetter(entity, "getStartTime"));
-        m.put("endTime", tryGetter(entity, "getEndTime"));
-        m.put("status", tryGetter(entity, "getStatus"));
-        m.put("notes", tryGetter(entity, "getNotes"));
-        return m;
-    }
+    private Map<String, Object> extractScheduleData(Schedule schedule) {
+        Map<String, Object> scheduleMessageHashMap = new HashMap<>();
 
-    private Object tryGetter(Object target, String methodName) {
-        try {
-            Method m = target.getClass().getMethod(methodName);
-            return m.invoke(target);
-        } catch (Exception ignored) {
-            return null;
-        }
+        scheduleMessageHashMap.put("nr_seq_schedule", schedule.getId());
+        scheduleMessageHashMap.put("nr_seq_patient", schedule.getPatientId());
+        scheduleMessageHashMap.put("nr_seq_doctor", schedule.getDoctorId());
+        scheduleMessageHashMap.put("schedule_date", schedule.getScheduleDate());
+        scheduleMessageHashMap.put("status", schedule.getStatus());
+        scheduleMessageHashMap.put("observation", schedule.getObservation());
+
+        return scheduleMessageHashMap;
     }
 }

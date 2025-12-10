@@ -34,40 +34,40 @@ public class NotificationConsumer {
     )
     public void onMessage(ConsumerRecord<String, Object> record,
                           @Header(name = KafkaHeaders.RECEIVED_KEY, required = false) String key) {
-        log.info("Mensagem recebida no Notification: topic={}, key={}, value={}", record.topic(), key, record.value());
+        log.info("Message received in Notification: topic={}, key={}, value={}", record.topic(), key, record.value());
 
         try {
             if (!(record.value() instanceof Map<?, ?> m)) {
-                log.warn("Payload inesperado: {}", record.value());
+                log.warn("Unexpected Payload\n: {}", record.value());
                 return;
             }
             Object eventType = m.get("eventType");
             if (eventType == null || !"SCHEDULE_CREATED".equals(eventType.toString())) {
-                log.debug("Evento ignorado: {}", eventType);
+                log.debug("Event ignored: {}", eventType);
                 return;
             }
 
             Object scheduleObj = m.get("schedule");
             Long scheduleId = extractScheduleId(scheduleObj);
             if (scheduleId == null) {
-                log.warn("ScheduleId ausente no payload: {}", scheduleObj);
+                log.warn("ScheduleId missing from payload\n: {}", scheduleObj);
                 return;
             }
 
             Optional<ScheduleNotification> sn = scheduleRepository.findByScheduleId(scheduleId);
             sn.ifPresentOrElse(
                     emailService::sendAppointmentEmails,
-                    () -> log.warn("Agendamento id={} não encontrado para envio de e-mail.", scheduleId)
+                    () -> log.warn("Appointment ID={} not found for email sending.", scheduleId)
             );
         } catch (Exception e) {
-            log.error("Erro ao processar mensagem Kafka", e);
+            log.error("Error processing Kafka message.", e);
         }
     }
 
     @SuppressWarnings("unchecked")
     private Long extractScheduleId(Object scheduleObj) {
         if (scheduleObj instanceof Map<?, ?> sm) {
-            Object id = sm.get("id");
+            Object id = sm.get("nr_seq_schedule");
             if (id != null) {
                 try {
                     return Long.valueOf(id.toString());

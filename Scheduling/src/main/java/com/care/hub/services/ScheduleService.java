@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,8 +38,7 @@ public class ScheduleService {
         var entity = new Schedule()
                 .setDoctorId(doctorId)
                 .setPatientId(body.getPatientId())
-                .setScheduleDate(date)
-                .setScheduleHour(time)
+                .setScheduleDate(body.getScheduleDate().toLocalDateTime())
                 .setObservation(body.getObservation())
                 .setStatus("SCHEDULED");
 
@@ -71,7 +71,7 @@ public class ScheduleService {
         var entity = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule not found"));
 
-        if (body.getScheduleDate() != null) entity.setScheduleDate(body.getScheduleDate().toLocalDate());
+        if (body.getScheduleDate() != null) entity.setScheduleDate(body.getScheduleDate().toLocalDateTime());
         if (body.getObservation() != null) entity.setObservation(body.getObservation());
         if (body.getStatus() != null) entity.setStatus(body.getStatus());
 
@@ -89,12 +89,7 @@ public class ScheduleService {
         scheduleDTO.setId(entity.getId());
         scheduleDTO.setDoctorId(entity.getDoctorId());
         scheduleDTO.setPatientId(entity.getPatientId());
-        if (entity.getScheduleDate() != null) {
-            var time = entity.getScheduleHour() != null ? entity.getScheduleHour() : java.time.LocalTime.MIDNIGHT;
-            scheduleDTO.setScheduleDate(java.time.OffsetDateTime.of(entity.getScheduleDate(), time, java.time.ZoneOffset.UTC));
-        } else {
-            scheduleDTO.setScheduleDate(null);
-        }
+        scheduleDTO.setScheduleDate(entity.getScheduleDate().atOffset(ZoneOffset.ofHours(-3)));
         scheduleDTO.setObservation(entity.getObservation());
         scheduleDTO.setStatus(entity.getStatus());
 
