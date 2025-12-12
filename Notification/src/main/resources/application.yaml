@@ -5,8 +5,8 @@ spring:
     name: CareHub-Notification
   datasource:
     url: jdbc:postgresql://carehub_db:5432/carehub
-    username: carehub
-    password: carehub123
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     default-schema: carehub
     driver-class-name: org.postgresql.Driver
   flyway:
@@ -17,7 +17,7 @@ spring:
     init:
       continue-on-error: true
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     client-id: care-hub-scheduling-producer
     consumer:
       group-id: notification-service
@@ -38,8 +38,6 @@ logging:
     org:
       flywaydb: DEBUG
       springframework:
-  swagger-ui:
-    url: /api/users.yaml
 
 notification:
   job:
@@ -48,4 +46,4 @@ notification:
 api:
   security:
     token:
-      secret: ${JWT_SECRET:carlosEduardoRinconJunior}
+      secret: ${JWT_SECRET}

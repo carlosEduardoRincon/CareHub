@@ -1,7 +1,7 @@
 package com.care.hub.jobs;
 
-import com.care.hub.data.NotificationScheduleRepository;
-import com.care.hub.email.EmailService;
+import com.care.hub.data.repositories.NotificationScheduleRepository;
+import com.care.hub.services.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

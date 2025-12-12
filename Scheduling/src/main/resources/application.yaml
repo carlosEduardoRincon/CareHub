@@ -5,8 +5,8 @@ spring:
     name: CareHub
   datasource:
     url: jdbc:postgresql://carehub_db:5432/carehub
-    username: carehub
-    password: carehub123
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${POSTGRES_PASSWORD}
     default-schema: carehub
   flyway:
     enabled: true
@@ -16,7 +16,7 @@ spring:
     init:
       continue-on-error: true
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     client-id: care-hub-scheduling-producer
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
@@ -30,6 +30,10 @@ spring:
         batch.size: 32768
         spring.json.add.type.headers: false
     driver-class-name: org.postgresql.Driver
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+    time-zone: UTC
 
 logging:
   level:
@@ -37,9 +41,9 @@ logging:
       flywaydb: DEBUG
       springframework:
   swagger-ui:
-    url: /api/patients.yaml
+    url: /api/schedules.yaml
 
 api:
   security:
     token:
-      secret: ${JWT_SECRET:carlosEduardoRinconJunior}
+      secret: ${JWT_SECRET}

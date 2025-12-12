@@ -1,8 +1,8 @@
-package com.care.hub.notification;
+package com.care.hub.consumer;
 
-import com.care.hub.data.NotificationScheduleRepository;
-import com.care.hub.email.EmailService;
-import com.care.hub.model.ScheduleNotification;
+import com.care.hub.data.repositories.NotificationScheduleRepository;
+import com.care.hub.services.EmailService;
+import com.care.hub.data.entities.ScheduleNotification;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,20 +41,20 @@ public class NotificationConsumer {
                 log.warn("Unexpected Payload\n: {}", record.value());
                 return;
             }
-            Object eventType = m.get("eventType");
+            var eventType = m.get("eventType");
             if (eventType == null || !"SCHEDULE_CREATED".equals(eventType.toString())) {
                 log.debug("Event ignored: {}", eventType);
                 return;
             }
 
-            Object scheduleObj = m.get("schedule");
-            Long scheduleId = extractScheduleId(scheduleObj);
+            var scheduleObj = m.get("schedule");
+            var scheduleId = extractScheduleId(scheduleObj);
             if (scheduleId == null) {
                 log.warn("ScheduleId missing from payload\n: {}", scheduleObj);
                 return;
             }
 
-            Optional<ScheduleNotification> sn = scheduleRepository.findByScheduleId(scheduleId);
+            var sn = scheduleRepository.findByScheduleId(scheduleId);
             sn.ifPresentOrElse(
                     emailService::sendAppointmentEmails,
                     () -> log.warn("Appointment ID={} not found for email sending.", scheduleId)
@@ -67,7 +67,7 @@ public class NotificationConsumer {
     @SuppressWarnings("unchecked")
     private Long extractScheduleId(Object scheduleObj) {
         if (scheduleObj instanceof Map<?, ?> sm) {
-            Object id = sm.get("nr_seq_schedule");
+            var id = sm.get("nr_seq_schedule");
             if (id != null) {
                 try {
                     return Long.valueOf(id.toString());

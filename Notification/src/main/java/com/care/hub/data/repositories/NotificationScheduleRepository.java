@@ -1,6 +1,6 @@
-package com.care.hub.data;
+package com.care.hub.data.repositories;
 
-import com.care.hub.model.ScheduleNotification;
+import com.care.hub.data.entities.ScheduleNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.JdbcClient;

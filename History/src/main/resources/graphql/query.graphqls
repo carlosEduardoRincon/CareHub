@@ -1,3 +1,17 @@
-type Query {}
+type Query {
+  historyByPatient(patientId: ID!, onlyFuture: Boolean = false): [HistoryRecord!]!
+}
 
-type Mutation {}
+type Mutation {
+
+}
+
+type HistoryRecord {
+  id: ID!
+  patientId: ID!
+  appointmentId: ID
+  eventType: String
+  eventTime: String
+  payload: String
+  createdAt: String
+}

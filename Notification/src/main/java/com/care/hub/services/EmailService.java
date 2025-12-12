@@ -1,6 +1,6 @@
-package com.care.hub.email;
+package com.care.hub.services;
 
-import com.care.hub.model.ScheduleNotification;
+import com.care.hub.data.entities.ScheduleNotification;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
