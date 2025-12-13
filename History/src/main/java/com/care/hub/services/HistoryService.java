@@ -24,20 +24,23 @@ public class HistoryService {
     @Transactional
     public void saveFromMessage(Object message) {
         Map<String, Object> map = coerceToMap(message);
-        Map<String, Object> schedule = map.get("schedule") == null
-                ? java.util.Map.of()
-                : coerceToMap(map.get("schedule"));
+        Map<String, Object> schedule;
+        if (map.containsKey("schedule")) {
+            schedule = coerceToMap(map.get("schedule"));
+        } else {
+            schedule = map;
+        }
 
         var record = new HistoryRecord();
 
         var patientId = schedule.get("nr_seq_patient");
-        record.setPatientId(patientId == null ? null : String.valueOf(patientId));
+        record.setPatientId(patientId == null ? null : Long.valueOf((String) patientId));
 
         var scheduleId = schedule.get("nr_seq_schedule");
-        record.setScheduleId(scheduleId == null ? null : String.valueOf(scheduleId));
+        record.setScheduleId(scheduleId == null ? null : Long.valueOf((String) scheduleId));
 
         var doctorId = schedule.get("nr_seq_doctor");
-        record.setDoctorId(doctorId == null ? null : String.valueOf(doctorId));
+        record.setDoctorId(doctorId == null ? null : Long.valueOf((String) doctorId));
 
         var eventType = map.get("eventType");
         record.setEventType(eventType == null ? null : String.valueOf(eventType));
@@ -59,6 +62,10 @@ public class HistoryService {
         record.setEventTime(eventTime);
         record.setPayload(writeJsonSafe(message));
         record.setCreatedAt(Instant.now());
+
+        if (record.getPatientId() == null) {
+            throw new IllegalArgumentException("patientId é obrigatório no evento.");
+        }
 
         repository.save(record);
     }
@@ -88,7 +95,6 @@ public class HistoryService {
         try {
             return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            // fallback simples
             return String.valueOf(obj);
         }
     }

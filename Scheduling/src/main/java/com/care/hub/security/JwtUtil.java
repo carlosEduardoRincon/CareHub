@@ -27,7 +27,7 @@ public class JwtUtil {
     private final long expirationSeconds;
 
     public JwtUtil(
-            @Value("${jwt.secret:change-me-please-very-strong-secret-key-32-bytes-min}") String secret,
+            @Value("${jwt.secret}") String secret,
             @Value("${jwt.expiration-seconds:86400}") long expirationSeconds
     ) {
         this.secret = secret.getBytes(StandardCharsets.UTF_8);

@@ -22,26 +22,26 @@ public class HistoryGraphQLController {
     @QueryMapping
     public List<GraphQLHistoryRecordDTO> historyByPatient(@Argument String patientId, @Argument Boolean onlyFuture) {
         boolean future = Boolean.TRUE.equals(onlyFuture);
-        List<HistoryRecord> records = future
+        var records = future
                 ? repository.findByPatientIdAndEventTimeAfterOrderByEventTimeAsc(patientId, Instant.now())
                 : repository.findByPatientIdOrderByEventTimeAsc(patientId);
 
         return records.stream()
-                .map(this::toGraphQL)
+                .map(this::toGraphQLDTO)
                 .collect(Collectors.toList());
     }
 
-    private GraphQLHistoryRecordDTO toGraphQL(HistoryRecord r) {
-        String id = r.getId() == null ? null : String.valueOf(r.getId());
-        String eventTime = r.getEventTime() == null ? null : r.getEventTime().toString();
-        String createdAt = r.getCreatedAt() == null ? null : r.getCreatedAt().toString();
+    private GraphQLHistoryRecordDTO toGraphQLDTO(HistoryRecord historyRecord) {
+        String eventTime = historyRecord.getEventTime() == null ? null : historyRecord.getEventTime().toString();
+        String createdAt = historyRecord.getCreatedAt() == null ? null : historyRecord.getCreatedAt().toString();
         return new GraphQLHistoryRecordDTO(
-                id,
-                r.getPatientId(),
-                r.getAppointmentId(),
-                r.getEventType(),
+                historyRecord.getId(),
+                historyRecord.getPatientId(),
+                historyRecord.getScheduleId(),
+                historyRecord.getDoctorId(),
+                historyRecord.getEventType(),
                 eventTime,
-                r.getPayload(),
+                historyRecord.getPayload(),
                 createdAt
         );
     }

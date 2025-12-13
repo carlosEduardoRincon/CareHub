@@ -3,13 +3,13 @@ type Query {
 }
 
 type Mutation {
-
+  _empty: String
 }
 
 type HistoryRecord {
   id: ID!
   patientId: ID!
-  appointmentId: ID
+  scheduleId: ID
   eventType: String
   eventTime: String
   payload: String

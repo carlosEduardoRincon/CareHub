@@ -17,13 +17,13 @@ public class HistoryRecord {
     private Long id;
 
     @Column(nullable = false)
-    private String patientId;
+    private Long patientId;
 
     @Column
-    private String scheduleId;
+    private Long scheduleId;
 
     @Column
-    private String doctorId;
+    private Long doctorId;
 
     @Column
     private String eventType;
@@ -44,12 +44,16 @@ public class HistoryRecord {
         return id;
     }
 
-    public String getPatientId() {
+    public Long getPatientId() {
         return patientId;
     }
 
-    public String getScheduleId() {
+    public Long getScheduleId() {
         return scheduleId;
+    }
+
+    public Long getDoctorId() {
+        return doctorId;
     }
 
     public String getEventType() {
@@ -68,11 +72,11 @@ public class HistoryRecord {
         return createdAt;
     }
 
-    public void setPatientId(String patientId) {
+    public void setPatientId(Long patientId) {
         this.patientId = patientId;
     }
 
-    public void setScheduleId(String scheduleId) {
+    public void setScheduleId(Long scheduleId) {
         this.scheduleId = scheduleId;
     }
 
@@ -92,7 +96,7 @@ public class HistoryRecord {
         this.createdAt = createdAt;
     }
 
-    public void setDoctorId(String doctorId) {
+    public void setDoctorId(Long doctorId) {
         this.doctorId = doctorId;
     }
 }

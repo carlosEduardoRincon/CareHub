@@ -1,6 +1,7 @@
 package com.care.hub.consumer;
 
 import com.care.hub.services.HistoryService;
+import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,8 +9,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 @Component
 public class HistoryEventListener {
@@ -41,8 +40,7 @@ public class HistoryEventListener {
                 return;
             }
 
-            var scheduleObj = m.get("schedule");
-            historyService.saveFromMessage(scheduleObj);
+            historyService.saveFromMessage(m);
 
         } catch (Exception e) {
             log.error("Error processing Kafka message.", e);
