@@ -1,41 +1,24 @@
 package com.care.hub.data.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "history_records")
 public class HistoryRecord {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "nr_seq_history_record")
     private Long id;
 
-    @Column(nullable = false)
     private Long patientId;
 
-    @Column
     private Long scheduleId;
 
-    @Column
     private Long doctorId;
 
-    @Column
     private String eventType;
 
-    @Column
-    private Instant eventTime;
+    private LocalDateTime eventTime;
 
-    @Column(columnDefinition = "TEXT")
     private String payload;
 
-    @Column(nullable = false)
     private Instant createdAt;
 
     public HistoryRecord() {
@@ -61,7 +44,7 @@ public class HistoryRecord {
         return eventType;
     }
 
-    public Instant getEventTime() {
+    public LocalDateTime getEventTime() {
         return eventTime;
     }
 
@@ -71,6 +54,10 @@ public class HistoryRecord {
 
     public Instant getCreatedAt() {
         return createdAt;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setPatientId(Long patientId) {
@@ -85,7 +72,7 @@ public class HistoryRecord {
         this.eventType = eventType;
     }
 
-    public void setEventTime(Instant eventTime) {
+    public void setEventTime(LocalDateTime eventTime) {
         this.eventTime = eventTime;
     }
 

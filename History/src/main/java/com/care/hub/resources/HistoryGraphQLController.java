@@ -1,13 +1,16 @@
 package com.care.hub.resources;
 
 import com.care.hub.dtos.GraphQLHistoryRecordDTO;
+import com.care.hub.dtos.EditHistoryRecordInput;
 import com.care.hub.data.entities.HistoryRecord;
 import com.care.hub.data.repositories.HistoryRecordRepository;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -29,6 +32,28 @@ public class HistoryGraphQLController {
         return records.stream()
                 .map(this::toGraphQLDTO)
                 .collect(Collectors.toList());
+    }
+
+    @MutationMapping
+    public GraphQLHistoryRecordDTO editHistoryRecord(@Argument EditHistoryRecordInput input) {
+        var entity = repository.findById(input.getId())
+                .orElseThrow(() -> new IllegalArgumentException("History record not found with id: " + input.getId()));
+
+        if (input.getEventType() != null) {
+            entity.setEventType(input.getEventType());
+        }
+        if (input.getEventTime() != null) {
+            entity.setEventTime(LocalDateTime.parse(input.getEventTime()));
+        }
+        if (input.getPayload() != null) {
+            entity.setPayload(input.getPayload());
+        }
+        if (input.getScheduleId() != null) {
+            entity.setScheduleId(input.getScheduleId());
+        }
+
+        var saved = repository.save(entity);
+        return toGraphQLDTO(saved);
     }
 
     private GraphQLHistoryRecordDTO toGraphQLDTO(HistoryRecord historyRecord) {

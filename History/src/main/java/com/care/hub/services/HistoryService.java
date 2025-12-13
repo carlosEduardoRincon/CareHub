@@ -5,7 +5,7 @@ import com.care.hub.data.repositories.HistoryRecordRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Map;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ public class HistoryService {
         var eventType = map.get("eventType");
         record.setEventType(eventType == null ? null : String.valueOf(eventType));
 
-        Instant eventTime = null;
+        LocalDateTime eventTime = null;
         var scheduleDate = schedule.get("schedule_date");
         if (scheduleDate instanceof java.util.List<?> list && list.size() >= 5) {
             int year = ((Number) list.get(0)).intValue();
@@ -53,8 +53,7 @@ public class HistoryService {
             int day = ((Number) list.get(2)).intValue();
             int hour = ((Number) list.get(3)).intValue();
             int minute = ((Number) list.get(4)).intValue();
-            eventTime = java.time.LocalDateTime.of(year, month, day, hour, minute)
-                    .toInstant(java.time.ZoneOffset.UTC);
+            eventTime = java.time.LocalDateTime.of(year, month, day, hour, minute);
         } else if (scheduleDate != null) {
             eventTime = parseInstantSafe(String.valueOf(scheduleDate));
         }
@@ -79,15 +78,11 @@ public class HistoryService {
         return objectMapper.convertValue(message, Map.class);
     }
 
-    private Instant parseInstantSafe(String s) {
+    private LocalDateTime parseInstantSafe(String s) {
         try {
-            return Instant.parse(s);
+            return LocalDateTime.parse(s);
         } catch (DateTimeParseException e) {
-            try {
-                return OffsetDateTime.parse(s).toInstant();
-            } catch (DateTimeParseException ignored) {
-                return null;
-            }
+            return null;
         }
     }
 

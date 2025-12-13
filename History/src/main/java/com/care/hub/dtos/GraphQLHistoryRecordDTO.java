@@ -2,7 +2,7 @@ package com.care.hub.dtos;
 
 public class GraphQLHistoryRecordDTO {
 
-    private final Long id;
+    private final Long historyId;
     private final Long patientId;
     private final Long scheduleId;
     private final Long doctorId;
@@ -11,7 +11,7 @@ public class GraphQLHistoryRecordDTO {
     private final String payload;
     private final String createdAt;
 
-    public GraphQLHistoryRecordDTO(Long id,
+    public GraphQLHistoryRecordDTO(Long historyId,
                                    Long patientId,
                                    Long scheduleId,
                                    Long doctorId,
@@ -20,7 +20,7 @@ public class GraphQLHistoryRecordDTO {
                                    String payload,
                                    String createdAt
     ) {
-        this.id = id;
+        this.historyId = historyId;
         this.patientId = patientId;
         this.scheduleId = scheduleId;
         this.doctorId = doctorId;
@@ -30,8 +30,8 @@ public class GraphQLHistoryRecordDTO {
         this.createdAt = createdAt;
     }
 
-    public Long getId() {
-        return id;
+    public Long getHistoryId() {
+        return historyId;
     }
 
     public Long getPatientId() {

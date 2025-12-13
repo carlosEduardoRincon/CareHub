@@ -3,15 +3,24 @@ type Query {
 }
 
 type Mutation {
-  _empty: String
+  editHistoryRecord(input: EditHistoryRecordInput!): HistoryRecord!
 }
 
 type HistoryRecord {
-  id: ID!
+  historyId: ID!
   patientId: ID!
   scheduleId: ID
+  doctorId: ID
   eventType: String
   eventTime: String
   payload: String
   createdAt: String
+}
+
+input EditHistoryRecordInput {
+  historyId: ID!
+  eventType: String
+  eventTime: String
+  payload: String
+  scheduleId: ID
 }
