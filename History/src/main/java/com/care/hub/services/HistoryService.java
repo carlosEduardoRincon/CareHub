@@ -34,13 +34,13 @@ public class HistoryService {
         var record = new HistoryRecord();
 
         var patientId = schedule.get("nr_seq_patient");
-        record.setPatientId(patientId == null ? null : Long.valueOf((String) patientId));
+        record.setPatientId(patientId == null ? null : ((Integer) patientId).longValue());
 
         var scheduleId = schedule.get("nr_seq_schedule");
-        record.setScheduleId(scheduleId == null ? null : Long.valueOf((String) scheduleId));
+        record.setScheduleId(scheduleId == null ? null : ((Integer) scheduleId).longValue());
 
         var doctorId = schedule.get("nr_seq_doctor");
-        record.setDoctorId(doctorId == null ? null : Long.valueOf((String) doctorId));
+        record.setDoctorId(doctorId == null ? null : ((Integer) doctorId).longValue());
 
         var eventType = map.get("eventType");
         record.setEventType(eventType == null ? null : String.valueOf(eventType));

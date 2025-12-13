@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface HistoryRecordRepository extends JpaRepository<HistoryRecord, Long> {
 
-    List<HistoryRecord> findByPatientIdOrderByEventTimeAsc(String patientId);
+    List<HistoryRecord> findByPatientIdOrderByEventTimeAsc(Long patientId);
 
-    List<HistoryRecord> findByPatientIdAndEventTimeAfterOrderByEventTimeAsc(String patientId, Instant eventTimeAfter);
+    List<HistoryRecord> findByPatientIdAndEventTimeAfterOrderByEventTimeAsc(Long patientId, Instant eventTimeAfter);
 }

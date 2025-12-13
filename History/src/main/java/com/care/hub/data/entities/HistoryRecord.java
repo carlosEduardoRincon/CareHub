@@ -14,6 +14,7 @@ public class HistoryRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "nr_seq_history_record")
     private Long id;
 
     @Column(nullable = false)

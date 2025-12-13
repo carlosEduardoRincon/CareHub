@@ -20,7 +20,7 @@ public class HistoryGraphQLController {
     }
 
     @QueryMapping
-    public List<GraphQLHistoryRecordDTO> historyByPatient(@Argument String patientId, @Argument Boolean onlyFuture) {
+    public List<GraphQLHistoryRecordDTO> historyByPatient(@Argument Long patientId, @Argument Boolean onlyFuture) {
         boolean future = Boolean.TRUE.equals(onlyFuture);
         var records = future
                 ? repository.findByPatientIdAndEventTimeAfterOrderByEventTimeAsc(patientId, Instant.now())
