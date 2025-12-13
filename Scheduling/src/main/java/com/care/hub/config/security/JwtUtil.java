@@ -1,4 +1,4 @@
-package com.care.hub.security;
+package com.care.hub.config.security;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

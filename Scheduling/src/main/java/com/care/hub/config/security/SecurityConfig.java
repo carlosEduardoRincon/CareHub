@@ -1,4 +1,4 @@
-package com.care.hub.security;
+package com.care.hub.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

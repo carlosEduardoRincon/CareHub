@@ -1,4 +1,4 @@
-package com.care.hub.security;
+package com.care.hub.config.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -1,4 +1,4 @@
-package com.care.hub.security;
+package com.care.hub.config.security;
 
 import com.care.hub.data.repositories.UserJdbcRepository;
 import jakarta.servlet.http.HttpServletRequest;

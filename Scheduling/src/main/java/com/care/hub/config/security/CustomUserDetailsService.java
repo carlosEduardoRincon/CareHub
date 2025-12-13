@@ -1,4 +1,4 @@
-package com.care.hub.security;
+package com.care.hub.config.security;
 
 import com.care.hub.data.entities.User;
 import com.care.hub.data.repositories.UserJdbcRepository;
@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
         List<GrantedAuthority> authorities = (user.getRoles() == null ? List.<String>of() : user.getRoles())
                 .stream()
