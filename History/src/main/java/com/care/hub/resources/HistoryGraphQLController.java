@@ -4,6 +4,7 @@ import com.care.hub.dtos.GraphQLHistoryRecordDTO;
 import com.care.hub.dtos.EditHistoryRecordInput;
 import com.care.hub.data.entities.HistoryRecord;
 import com.care.hub.data.repositories.HistoryRecordRepository;
+import com.care.hub.exceptions.HistoryRecordNotFoundException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,8 +37,8 @@ public class HistoryGraphQLController {
 
     @MutationMapping
     public GraphQLHistoryRecordDTO editHistoryRecord(@Argument EditHistoryRecordInput input) {
-        var entity = repository.findById(input.getId())
-                .orElseThrow(() -> new IllegalArgumentException("History record not found with id: " + input.getId()));
+        var entity = repository.findById(input.getHistoryId())
+                .orElseThrow(() -> new HistoryRecordNotFoundException(input.getHistoryId()));
 
         if (input.getEventType() != null) {
             entity.setEventType(input.getEventType());

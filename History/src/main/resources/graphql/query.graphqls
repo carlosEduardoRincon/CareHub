@@ -21,6 +21,5 @@ input EditHistoryRecordInput {
   historyId: ID!
   eventType: String
   eventTime: String
-  payload: String
   scheduleId: ID
 }
