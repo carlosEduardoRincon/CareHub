@@ -1,0 +1,24 @@
+graph TD
+    subgraph "Rede Backend"
+        DB[(Postgres<br/>carehub-postgres<br/>5432)]
+        KAFKA[Kafka<br/>carehub-kafka<br/>9092]
+        NOTIF[Notification<br/>carehub-notification<br/>8081]
+        SCHED[Scheduling<br/>carehub-scheduling<br/>8082]
+    HIST[History<br/>carehub-history<br/>8083]
+    end
+
+    NOTIF -->|JDBC| DB
+    SCHED -->|JDBC| DB
+    HIST -->|JDBC| DB
+
+    NOTIF -->|Bootstrap Kafka| KAFKA
+    SCHED -->|Bootstrap Kafka| KAFKA
+    HIST -->|Bootstrap Kafka| KAFKA
+
+    NOTIF -->|SMTP| MAIL[(Servidor SMTP Externo<br/>MAIL_HOST:MAIL_PORT)]
+
+    style DB fill:#e1f5fe
+    style KAFKA fill:#f3e5f5
+    style NOTIF fill:#e8f5e8
+    style SCHED fill:#fff3e0
+    style HIST fill:#fce4ec
