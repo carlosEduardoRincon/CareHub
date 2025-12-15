@@ -1,5 +1,4 @@
 # CareHub
-# CareHub
 
 Plataforma modular para gestão de agendamentos, notificações e histórico clínico. O projeto é composto por múltiplos serviços independentes, banco de dados relacional e um barramento de eventos para comunicação assíncrona.
 
