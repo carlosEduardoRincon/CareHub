@@ -4,13 +4,11 @@ public class EditHistoryRecordInput {
     private Long id;
     private String eventType;
     private String eventTime; 
-    private String payload;
     private Long scheduleId;
 
-    public EditHistoryRecordInput(String eventType, String eventTime, String payload, Long scheduleId) {
+    public EditHistoryRecordInput(String eventType, String eventTime, Long scheduleId) {
         this.eventType = eventType;
         this.eventTime = eventTime;
-        this.payload = payload;
         this.scheduleId = scheduleId;
     }
 
@@ -24,10 +22,6 @@ public class EditHistoryRecordInput {
 
     public String getEventTime() {
         return eventTime;
-    }
-
-    public String getPayload() {
-        return payload;
     }
 
     public Long getScheduleId() {

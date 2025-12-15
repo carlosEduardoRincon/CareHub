@@ -45,9 +45,6 @@ public class HistoryGraphQLController {
         if (input.getEventTime() != null) {
             entity.setEventTime(LocalDateTime.parse(input.getEventTime()));
         }
-        if (input.getPayload() != null) {
-            entity.setPayload(input.getPayload());
-        }
         if (input.getScheduleId() != null) {
             entity.setScheduleId(input.getScheduleId());
         }

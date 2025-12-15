@@ -57,13 +57,11 @@ public class HistoryRecordRepository {
                             UPDATE history_records
                             SET status = COALESCE(:eventType, status),
                                 schedule_date = COALESCE(:eventTime, schedule_date),
-                                payload    = COALESCE(:payload, payload),
                                 nr_seq_schedule = COALESCE(:scheduleId, nr_seq_schedule)
                             WHERE nr_seq_history_record = :id
                             """)
                     .param("eventType", entity.getEventType())
                     .param("eventTime", entity.getEventTime())
-                    .param("payload", entity.getPayload())
                     .param("scheduleId", entity.getScheduleId())
                     .param("id", entity.getId())
                     .update();
@@ -109,7 +107,7 @@ public class HistoryRecordRepository {
                         ORDER BY schedule_date ASC
                         """)
                 .param("patientId", patientId)
-                .param("eventTimeAfter", eventTimeAfter)
+                .param("eventTimeAfter", Timestamp.from(eventTimeAfter))
                 .query(this::mapRow)
                 .list();
     }
