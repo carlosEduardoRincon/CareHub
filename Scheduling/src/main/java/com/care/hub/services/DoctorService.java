@@ -30,7 +30,7 @@ public class DoctorService {
     private PasswordEncoder passwordEncoder;
 
     public DoctorDTO createDoctor(CreateDoctorDTO body) {
-        var entity = new Doctor()
+        var doctor = new Doctor()
                 .setName(body.getName())
                 .setEmail(body.getEmail())
                 .setCrm(body.getCrm())
@@ -42,15 +42,17 @@ public class DoctorService {
         user.setRoles(java.util.List.of("ROLE_DOCTOR"));
         var userCreated = userRepository.save(user);
 
-        entity.setUserId(userCreated.getId());
-        var saved = doctorRepository.save(entity);
-        return DoctorMapper.toDTO(saved);
+        doctor.setUserId(userCreated.getId());
+        var doctorCreated = doctorRepository.save(doctor);
+        doctor.setId(doctorCreated.getId());
+
+        return DoctorMapper.toDTO(doctor);
     }
 
     public DoctorDTO findById(Long doctorId) {
-        var entity = doctorRepository.findById(doctorId)
+        var doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found"));
-        return DoctorMapper.toDTO(entity);
+        return DoctorMapper.toDTO(doctor);
     }
 
     public PaginatedDoctorsDTO listDoctors(Integer page, Integer perPage) {
@@ -69,15 +71,15 @@ public class DoctorService {
     }
 
     public DoctorDTO updateDoctor(Long doctorId, UpdateDoctorDTO body) {
-        var entity = doctorRepository.findById(doctorId)
+        var doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Doctor not found"));
 
-        if (body.getName() != null) entity.setName(body.getName());
-        if (body.getEmail() != null) entity.setEmail(body.getEmail());
-        if (body.getSpeciality() != null) entity.setSpeciality(body.getSpeciality().toString());
+        if (body.getName() != null) doctor.setName(body.getName());
+        if (body.getEmail() != null) doctor.setEmail(body.getEmail());
+        if (body.getSpeciality() != null) doctor.setSpeciality(body.getSpeciality().toString());
 
-        doctorRepository.update(entity);
-        return DoctorMapper.toDTO(entity);
+        doctorRepository.update(doctor);
+        return DoctorMapper.toDTO(doctor);
     }
 
     public void deleteDoctor(Long doctorId) {
