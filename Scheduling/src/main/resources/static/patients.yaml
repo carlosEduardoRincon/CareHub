@@ -165,6 +165,12 @@ components:
           minLength: 5
           maxLength: 50
           example: example@email.com.br
+        password:
+          type: string
+          description: Password of the patient
+          minLength: 5
+          maxLength: 30
+          example: strongPassword123
         address:
           type: string
           description: Address of the patient
@@ -260,12 +266,6 @@ components:
           format: date
           description: Birthdate of the patient
           example: 2025-07-17
-        password:
-          type: string
-          description: Generated password of the patient
-          minLength: 5
-          maxLength: 30
-          example: strongPassword123
         telephone:
           type: string
           description: Telephone of the patient

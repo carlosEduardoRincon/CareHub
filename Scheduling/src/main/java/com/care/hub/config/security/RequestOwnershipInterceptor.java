@@ -20,8 +20,8 @@ public class RequestOwnershipInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String path = request.getRequestURI();
-        String method = request.getMethod();
+        var path = request.getRequestURI();
+        var method = request.getMethod();
 
         if (!"GET".equalsIgnoreCase(method)) {
             return true;
@@ -45,13 +45,13 @@ public class RequestOwnershipInterceptor implements HandlerInterceptor {
 
         var userIdOpt = this.userJdbcRepository.findUserIdByUsername(auth.getName());
         if (userIdOpt.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Acesso negado.");
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied.");
             return false;
         }
 
        var myPatientIdOpt = this.userJdbcRepository.findPatientIdByUserId(userIdOpt.get());
         if (myPatientIdOpt.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Acesso negado.");
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied.");
             return false;
         }
 
@@ -59,7 +59,7 @@ public class RequestOwnershipInterceptor implements HandlerInterceptor {
         if (path.equals("/schedules")) {
             var qPatientId = request.getParameter("patientId");
             if (qPatientId == null || !qPatientId.equals(myPatientIdStr)) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Pacientes só podem visualizar suas próprias consultas.");
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Patients can only view their own appointments.");
                 return false;
             }
             return true;
@@ -72,11 +72,12 @@ public class RequestOwnershipInterceptor implements HandlerInterceptor {
                 var scheduleId = Long.parseLong(last);
                 var schedulePatientIdOpt = this.userJdbcRepository.findSchedulePatientIdByScheduleId(scheduleId);
                 if (schedulePatientIdOpt.isEmpty() || !myPatientIdOpt.get().equals(schedulePatientIdOpt.get())) {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "Pacientes só podem visualizar suas próprias consultas.");
+                    response.sendError(HttpServletResponse.SC_FORBIDDEN,
+                            "Patients can only view their own appointments.");
                     return false;
                 }
             } catch (NumberFormatException e) {
-                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Recurso inválido.");
+                response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid resource.");
                 return false;
             }
         }

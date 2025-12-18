@@ -32,11 +32,7 @@ public class SecurityConfig {
                 .userDetailsService(userDetailsService)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/schedules").hasRole("NURSE")
-                        .requestMatchers(HttpMethod.GET, "/schedules/**").hasAnyRole("NURSE", "DOCTOR", "PATIENT")
-                        .requestMatchers(HttpMethod.PUT, "/schedules/**").hasRole("DOCTOR")
-                        .requestMatchers(HttpMethod.PATCH, "/schedules/**").hasRole("DOCTOR")
+                        .requestMatchers(HttpMethod.POST, "/graphql").hasAnyRole("NURSE", "DOCTOR", "PATIENT")
                         .anyRequest().permitAll()
                 )
                 .authenticationProvider(authenticationProvider)
