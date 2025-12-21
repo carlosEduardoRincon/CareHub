@@ -1,0 +1,909 @@
+{
+	"info": {
+		"_postman_id": "a5058aad-4121-42bc-8a06-d8f6d625db16",
+		"name": "CareHub Scheduling API",
+		"description": "Coleção Postman unificada com autenticação JWT e rotas de Doctors, Patients, Nurses e Schedules.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46900515",
+		"_collection_link": "https://carloseduardo-8013715.postman.co/workspace/Carlos-Eduardo's-Workspace~17e4a49c-9458-4f9c-86ee-71cf7762a7b9/collection/46900515-a5058aad-4121-42bc-8a06-d8f6d625db16?action=share&source=collection_link&creator=46900515"
+	},
+	"item": [
+		{
+			"name": "Doctors",
+			"item": [
+				{
+					"name": "Create Doctor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dr. Carlos Eduardo Rincon\",\n  \"email\": \"noreplycarehub@gmail.com\",\n  \"login\": \"rincon\",\n  \"password\": \"secret123\",\n  \"cpf\": \"12345678900\",\n  \"crm\": \"CRM-12345\",\n  \"speciality\": \"CARDIOLOGY\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/doctors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Doctor by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/doctors/{{doctorId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors",
+								"{{doctorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Doctors (paginated)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/doctors?page=0&perPage=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "perPage",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Doctor",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dr. John Updated\",\n  \"email\": \"john.updated@carehub.com\",\n  \"speciality\": \"DERMATOLOGY\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/doctors/{{doctorId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors",
+								"{{doctorId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Doctor",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/doctors/{{doctorId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors",
+								"{{doctorId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Patients",
+			"item": [
+				{
+					"name": "Create Patient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Patient\",\n  \"email\": \"patient1@gmail.com\",\n  \"birthDate\": \"1990-05-10\",\n  \"address\": \"Rua A, 123\",\n  \"telephone\": \"+55 11 99999-0000\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/patients",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Patient by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/patients/{{patientId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients",
+								"{{patientId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Patients (paginated)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/patients?page=0&perPage=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "perPage",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Patient",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Jane Doe Updated\",\n  \"email\": \"jane.updated@carehub.com\",\n  \"address\": \"Rua B, 456\",\n  \"telephone\": \"+55 11 98888-7777\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/patients/{{patientId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients",
+								"{{patientId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Patient",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/patients/{{patientId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients",
+								"{{patientId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Nurses",
+			"item": [
+				{
+					"name": "Create Nurse",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Nurse Mary\",\n  \"login\": \"mnurse\",\n  \"password\": \"secret123\",\n  \"cpf\": \"98765432100\",\n  \"coren\": \"COREN-54321\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/nurses",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"nurses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Nurse by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/nurses/{{nurseId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"nurses",
+								"{{nurseId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Nurses (paginated)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/nurses?page=0&perPage=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"nurses"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "perPage",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Nurse",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Nurse Mary Updated\",\n  \"cpf\": \"98765432100\",\n  \"coren\": \"COREN-99999\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/nurses/{{nurseId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"nurses",
+								"{{nurseId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Nurse",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/nurses/{{nurseId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"nurses",
+								"{{nurseId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Schedules",
+			"item": [
+				{
+					"name": "Create Schedule",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"doctorId\": 1,\n  \"patientId\": 1,\n  \"scheduleDate\": \"2025-12-10T16:00:00Z\",\n  \"observation\": \"Routine schedule\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/schedules",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"schedules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Schedule by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/schedules/{{scheduleId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"schedules",
+								"{{scheduleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Schedules (paginated)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/schedules?page=0&perPage=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"schedules"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "perPage",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Schedule",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"scheduleDate\": \"2025-01-15T16:00:00Z\",\n  \"observation\": \"Ajuste de horário\",\n  \"status\": \"SCHEDULED\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/schedules/{{scheduleId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"schedules",
+								"{{scheduleId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Schedule",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/schedules/{{scheduleId}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"schedules",
+								"{{scheduleId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Automation",
+			"item": [
+				{
+					"name": "Create Doctor",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Dr. Carlos Eduardo Rincon\",\n  \"email\": \"noreplycarehub@gmail.com\",\n  \"login\": \"rincon\",\n  \"password\": \"secret123\",\n  \"cpf\": \"12345678900\",\n  \"crm\": \"CRM-12345\",\n  \"speciality\": \"CARDIOLOGY\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/doctors",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"doctors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Patient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Patient\",\n  \"email\": \"patient2@gmail.com\",\n  \"password\": \"strongPassword123\",\n  \"birthDate\": \"1990-05-10\",\n  \"address\": \"Rua A, 123\",\n  \"telephone\": \"+55 11 99999-0000\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/patients",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"patients"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Nurse",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Nurse Mary\",\n  \"login\": \"mnurse\",\n  \"password\": \"secret123\",\n  \"cpf\": \"98765432100\",\n  \"coren\": \"COREN-54321\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/nurses",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"nurses"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Auth - Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"  try {",
+									"    const json = pm.response.json();",
+									"    if (json && json.token) {",
+									"      pm.collectionVariables.set('jwt', json.token);",
+									"      console.log('JWT salvo em collectionVariables.jwt');",
+									"    }",
+									"  } catch (e) {",
+									"    console.warn('Falha ao ler token da resposta:', e);",
+									"  }",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\": \"mnurse\",\n  \"password\": \"secret123\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Schedule (future)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"doctorId\": 1,\n  \"patientId\": 1,\n  \"scheduleDate\": \"2026-01-10T15:00:00Z\",\n  \"observation\": \"Routine consult\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/schedules",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"schedules"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Schedule (past)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"doctorId\": 1,\n  \"patientId\": 1,\n  \"scheduleDate\": \"2025-01-10T15:00:00Z\",\n  \"observation\": \"Consulta de rotina\"\n}"
+						},
+						"url": {
+							"raw": "{{baseUrl}}/schedules",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"schedules"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth - Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (pm.response.code === 200) {",
+							"  try {",
+							"    const json = pm.response.json();",
+							"    if (json && json.token) {",
+							"      pm.collectionVariables.set('jwt', json.token);",
+							"      console.log('JWT salvo em collectionVariables.jwt');",
+							"    }",
+							"  } catch (e) {",
+							"    console.warn('Falha ao ler token da resposta:', e);",
+							"  }",
+							"}"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"mnurse\",\n  \"password\": \"secret123\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "jwt",
+			"value": ""
+		},
+		{
+			"key": "doctorId",
+			"value": "1"
+		},
+		{
+			"key": "patientId",
+			"value": "1"
+		},
+		{
+			"key": "nurseId",
+			"value": "1"
+		},
+		{
+			"key": "scheduleId",
+			"value": "1"
+		}
+	]
+}

@@ -1,0 +1,239 @@
+{
+	"info": {
+		"_postman_id": "814cc558-627c-417f-81c8-f640104aee31",
+		"name": "CareHub - History GraphQL",
+		"description": "Coleção para testar queries e mutations GraphQL do serviço de histórico.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46900515",
+		"_collection_link": "https://carloseduardo-8013715.postman.co/workspace/Carlos-Eduardo's-Workspace~17e4a49c-9458-4f9c-86ee-71cf7762a7b9/collection/46900515-814cc558-627c-417f-81c8-f640104aee31?action=share&source=collection_link&creator=46900515"
+	},
+	"item": [
+		{
+			"name": "History - Query by patient (all)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const json = pm.response.json();",
+							"pm.test(\"No GraphQL errors\", function () {",
+							"  pm.expect(json.errors).to.be.undefined;",
+							"});",
+							"pm.test(\"Data.historyByPatient is array\", function () {",
+							"  pm.expect(json.data).to.have.property('historyByPatient');",
+							"  pm.expect(json.data.historyByPatient).to.be.an('array');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwtToken}}"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query HistoryByPatient($patientId: ID!, $onlyFuture: Boolean) {  \r\n    historyByPatient(patientId: $patientId, onlyFuture: $onlyFuture) {\r\n        patientId\r\n        scheduleId\r\n        doctorId\r\n        eventType\r\n        eventTime\r\n        payload\r\n        createdAt\r\n    }\r\n}",
+						"variables": "{  \r\n    \"patientId\": 1,  \r\n    \"onlyFuture\": false\r\n}"
+					}
+				},
+				"url": {
+					"raw": "{{baseUrlHistory}}/graphql",
+					"host": [
+						"{{baseUrlHistory}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "History - Query by patient (future only)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const json = pm.response.json();",
+							"pm.test(\"No GraphQL errors\", function () {",
+							"  pm.expect(json.errors).to.be.undefined;",
+							"});",
+							"pm.test(\"Data.historyByPatient is array\", function () {",
+							"  pm.expect(json.data).to.have.property('historyByPatient');",
+							"  pm.expect(json.data.historyByPatient).to.be.an('array');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwtToken}}"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "query HistoryByPatientFuture($patientId: ID!) {\r\n    historyByPatient(patientId: $patientId, onlyFuture: true) {\r\n        patientId\r\n        scheduleId\r\n        doctorId\r\n        eventType\r\n        eventTime\r\n        payload\r\n        createdAt\r\n    }\r\n}",
+						"variables": "{\r\n    \"patientId\": 1\r\n}"
+					}
+				},
+				"url": {
+					"raw": "{{baseUrlHistory}}/graphql",
+					"host": [
+						"{{baseUrlHistory}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "History - Edit (input.historyId)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"const json = pm.response.json();",
+							"pm.test(\"No GraphQL errors\", function () {",
+							"  pm.expect(json.errors).to.be.undefined;",
+							"});",
+							"pm.test(\"Data.editHistoryRecord exists\", function () {",
+							"  pm.expect(json.data).to.have.property('editHistoryRecord');",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwtToken}}"
+					}
+				],
+				"body": {
+					"mode": "graphql",
+					"graphql": {
+						"query": "mutation EditHistoryRecord($input: EditHistoryRecordInput!) {\r\n    editHistoryRecord(input: $input) {\r\n        patientId\r\n        scheduleId\r\n        doctorId\r\n        eventType\r\n        eventTime\r\n        payload\r\n        createdAt\r\n    }\r\n}\r\n",
+						"variables": "{\r\n  \"input\": {\r\n    \"historyId\": 1,\r\n    \"eventType\": \"UPDATED_SCHEDULE\",\r\n    \"eventTime\": \"2025-12-13T10:30:00\",\r\n    \"scheduleId\": 1\r\n  }\r\n}\r\n"
+					}
+				},
+				"url": {
+					"raw": "{{baseUrlHistory}}/graphql",
+					"host": [
+						"{{baseUrlHistory}}"
+					],
+					"path": [
+						"graphql"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrlHistory",
+			"value": "http://localhost:8083"
+		},
+		{
+			"key": "jwtToken",
+			"value": ""
+		},
+		{
+			"key": "patientId",
+			"value": "1"
+		},
+		{
+			"key": "historyRecordId",
+			"value": "1"
+		},
+		{
+			"key": "scheduleId",
+			"value": "1"
+		}
+	]
+}
