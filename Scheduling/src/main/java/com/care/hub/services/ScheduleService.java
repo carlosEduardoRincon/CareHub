@@ -27,11 +27,9 @@ public class ScheduleService {
 
     public ScheduleDTO createSchedule(CreateScheduleDTO body) {
         var dateTime = body.getScheduleDate();
-        var date = dateTime.toLocalDate();
-        var time = dateTime.toLocalTime();
         var doctorId = body.getDoctorId();
 
-        if (scheduleConflictRepository.existsByDoctorAndDateTime(doctorId, date, time)) {
+        if (scheduleConflictRepository.existsByDoctorAndDateTime(doctorId, dateTime.toLocalDateTime())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "There is already an appointment scheduled with this doctor at this time.");
         }
 
